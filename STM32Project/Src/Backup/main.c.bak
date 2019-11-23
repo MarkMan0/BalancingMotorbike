@@ -26,7 +26,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stm32f3xx_ll_usart.h"
-#include "callbacks.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -53,8 +52,6 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
-void usart2_rx(uint8_t);
 
 /* USER CODE END PFP */
 
@@ -102,7 +99,6 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  USART2_register_RXNE_callback(usart2_rx);
   LL_USART_EnableIT_RXNE(USART2);
 
   /* USER CODE END 2 */
@@ -154,10 +150,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-void usart2_rx(uint8_t x) {
-	return;
-}
 
 /* USER CODE END 4 */
 
