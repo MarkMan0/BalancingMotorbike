@@ -6,7 +6,8 @@
 void readData(MPU6050* mpu) {
 
 	/* TODO:
-	 * Read accelerometer and gyro data into the struct
+	 * Using the low pass and high pass filters,
+	 * update the accelerometer and gyro data in the struct
 	 */
 
 }

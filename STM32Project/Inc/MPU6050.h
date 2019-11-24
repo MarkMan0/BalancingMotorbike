@@ -1,11 +1,16 @@
 #ifndef _MPU6050_H
 #define _MPU6050_H 1
 
+#include "lpf1.h"
+#include "hpf1.h"
 
 typedef struct _MPU6050 {
 
 	float acc[3];
 	float g[3];
+
+	LPF1 lpf;
+	HPF1 hpf;
 
 } MPU6050;
 
