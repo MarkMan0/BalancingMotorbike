@@ -59,6 +59,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 void usart2_rx(uint8_t);
+void usart1_rx(uint8_t);
 
 /* USER CODE END PFP */
 
@@ -109,6 +110,9 @@ int main(void)
 
   USART2_register_RXNE_callback(usart2_rx);
   LL_USART_EnableIT_RXNE(USART2);
+
+  USART1_register_RXNE_callback(usart1_rx);
+  LL_USART_EnableIT_RXNE(USART1);
 
   /* USER CODE END 2 */
 
@@ -167,6 +171,13 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 void usart2_rx(uint8_t x) {
+	LL_USART_TransmitData8(USART1, x);
+	LL_USART_TransmitData8(USART2, x);
+	return;
+}
+
+void usart1_rx(uint8_t x) {
+	LL_USART_TransmitData8(USART2, x);
 	return;
 }
 
