@@ -28,6 +28,10 @@
 void MX_SYS_Init(void)
 {
 
+  /* Peripheral clock enable */
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
+  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
+
 }
 
 /* USER CODE BEGIN 1 */

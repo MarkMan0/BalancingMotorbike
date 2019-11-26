@@ -11,6 +11,9 @@
 extern void (*usart2_rxne_callback)(uint8_t);
 void USART2_register_RXNE_callback(void (*callback)(uint8_t));
 
+/*		USART1 CALLBACKS		*/
+extern void (*usart1_rxne_callback)(uint8_t);
+void USART1_register_RXNE_callback(void (*callback)(uint8_t));
 
 
 #endif

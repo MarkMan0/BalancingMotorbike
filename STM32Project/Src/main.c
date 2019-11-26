@@ -56,6 +56,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 void usart2_rx(uint8_t);
+void usart1_rx(uint8_t);
 
 /* USER CODE END PFP */
 
@@ -78,7 +79,14 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+  
+
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
+  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
+
+  NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+
+  /* System interrupt init*/
 
   /* USER CODE BEGIN Init */
 
@@ -95,10 +103,14 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_I2C1_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   USART2_register_RXNE_callback(usart2_rx);
   LL_USART_EnableIT_RXNE(USART2);
+
+  USART1_register_RXNE_callback(usart1_rx);
+  LL_USART_EnableIT_RXNE(USART1);
 
   /* USER CODE END 2 */
 
@@ -143,13 +155,23 @@ void SystemClock_Config(void)
   {
   
   }
+  LL_Init1msTick(8000000);
+  LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
   LL_SetSystemCoreClock(8000000);
+  LL_RCC_SetUSARTClockSource(LL_RCC_USART1_CLKSOURCE_PCLK1);
   LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);
 }
 
 /* USER CODE BEGIN 4 */
 
 void usart2_rx(uint8_t x) {
+	LL_USART_TransmitData8(USART1, x);
+	LL_USART_TransmitData8(USART2, x);
+	return;
+}
+
+void usart1_rx(uint8_t x) {
+	LL_USART_TransmitData8(USART2, x);
 	return;
 }
 
