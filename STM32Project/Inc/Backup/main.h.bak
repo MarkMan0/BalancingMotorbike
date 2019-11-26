@@ -75,7 +75,7 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define MPU6050_ADDRESS (0x68)
+#define MPU6050_ADDRESS (0xD0)
 #define MPU_6050_REG_PWR_MGMT_1 (0x6B)
 #define MPU_6050_REG_ACCEL_XOUT_H (0x3B)
 #define MPU_6050_REG_GYRO_XOUT_H (0x43)

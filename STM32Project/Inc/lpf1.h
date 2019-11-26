@@ -8,7 +8,7 @@
 typedef struct _LPF1 {
 
 	float lastY, lastU;
-	const float b1, a1;
+	float b1, a1;
 
 } LPF1;
 

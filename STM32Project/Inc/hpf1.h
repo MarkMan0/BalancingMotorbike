@@ -9,7 +9,7 @@
 typedef struct _HPF1 {
 
 	float lastY, lastU;
-	const float b0, b1, a1;
+	float b0, b1, a1;
 
 } HPF1;
 
