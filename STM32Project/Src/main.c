@@ -174,7 +174,6 @@ void SystemClock_Config(void)
 
 void usart2_rx(uint8_t x) {
 	LL_USART_TransmitData8(USART1, x);
-	LL_USART_TransmitData8(USART2, x);
 	return;
 }
 
