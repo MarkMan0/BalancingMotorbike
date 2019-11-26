@@ -13,7 +13,7 @@ typedef struct _HPF1 {
 
 } HPF1;
 
-float makeReadingHPF1(LPF1* lpf, float data);
+float makeReadingHPF1(HPF1* lpf, float data);
 
 
 #endif
