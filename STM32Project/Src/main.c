@@ -26,6 +26,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <string.h>
+#include <stdio.h>
 #include "stm32f3xx_ll_usart.h"
 #include "callbacks.h"
 /* USER CODE END Includes */
@@ -111,8 +113,26 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  i2c_write(MPU6050_ADDRESS << 1, MPU_6050_REG_PWR_MGMT_1, 0x00);
+  uint8_t buff[6];
+  for(int i = 0; i < 6; ++i){
+	  buff[i] = 0;
+  }
+
   while (1)
   {
+	  for(int i = 0; i < 6; ++i){
+		  buff[i] = 0;
+	  }
+	  i2c_read_n(MPU6050_ADDRESS << 1, MPU_6050_REG_ACCEL_XOUT_H, buff, 6);
+
+	  int16_t x = (buff[0] << 8) | buff[1];
+	  float accX = 1.0*x/16384.0;
+	  x = (buff[2] << 8) | buff[3];
+	  float accY = 1.0*x/16384.0;
+	  x = (buff[4] << 8) | buff[5];
+	  float accZ = 1.0*x/16384.0;
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
