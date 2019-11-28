@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "callbacks.h"
 
+//usartx_rxne_callback is called from the ISR, for incoming data
 
 void (*usart2_rxne_callback)(uint8_t) = NULL;	//callback is null at start
 

@@ -4,6 +4,7 @@
 #include <string.h>
 #include "lpf1.h"
 
+//reads all 6 data via I2C
 void readData(MPU6050* mpu) {
 	static uint8_t buff[6];
 
@@ -17,11 +18,11 @@ void readData(MPU6050* mpu) {
 	}
 
 }
+
+//sets the init condition in the MPU, via I2C
+//sets up gains and internal filters
 void MPU6050init(MPU6050* mpu) {
 
-	/* TODO:
-	 * Initialize the MPU, set up the sampling rate
-	 */
 	//turn off hpf and lpf (gain=1)
 
 	for(uint8_t i = 0; i < 3; ++i) {

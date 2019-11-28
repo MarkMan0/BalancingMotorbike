@@ -108,7 +108,7 @@ int main(void)
   MX_I2C1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+  //register USART callbacks and enable interrupts
   USART2_register_RXNE_callback(usart2_rx);
   LL_USART_EnableIT_RXNE(USART2);
 
@@ -119,7 +119,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  MPU6050 mpu = { 0 };
+  MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
   MPU6050init(&mpu);
   while (1)
   {
@@ -173,12 +173,12 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 void usart2_rx(uint8_t x) {
-	LL_USART_TransmitData8(USART1, x);
+	LL_USART_TransmitData8(USART1, x);	//re-route usart2 to usart1
 	return;
 }
 
 void usart1_rx(uint8_t x) {
-	LL_USART_TransmitData8(USART2, x);
+	LL_USART_TransmitData8(USART2, x);	//re-route usart1 to usart2
 	return;
 }
 
