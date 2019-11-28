@@ -17,6 +17,14 @@ void readData(MPU6050* mpu) {
 		mpu->acc[j] = makeReadingLPF1(&(mpu->lpf[j]), 1.0*c/ 16384.0 );
 	}
 
+	memset(buff, 0, 6);
+	i2c_read_n(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, buff, 6);
+	for(int i = 0, j = 0; i < 6; i += 2, ++j) {
+		int16_t a = buff[i], b = buff[i+1];
+		int16_t c = ((a << 8) | b );
+		mpu->g[j] = makeReadingHPF1(&(mpu->hpf[j]), 1.0*c/ 131.0 );
+	}
+
 }
 
 //sets the init condition in the MPU, via I2C
