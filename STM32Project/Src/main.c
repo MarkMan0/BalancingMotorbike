@@ -20,10 +20,17 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
+#include "usart.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <string.h>
+#include <stdio.h>
+#include "stm32f3xx_ll_usart.h"
+#include "callbacks.h"
+#include "MPU6050.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,6 +57,9 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
+
+void usart2_rx(uint8_t);
+void usart1_rx(uint8_t);
 
 /* USER CODE END PFP */
 
@@ -93,14 +103,29 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_USART2_UART_Init();
+  MX_I2C1_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  //register USART callbacks and enable interrupts
+  USART2_register_RXNE_callback(usart2_rx);
+  LL_USART_EnableIT_RXNE(USART2);
+
+  USART1_register_RXNE_callback(usart1_rx);
+  LL_USART_EnableIT_RXNE(USART1);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
+  MPU6050init(&mpu);
   while (1)
   {
+	  readData(&mpu);
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -141,9 +166,21 @@ void SystemClock_Config(void)
   LL_Init1msTick(8000000);
   LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
   LL_SetSystemCoreClock(8000000);
+  LL_RCC_SetUSARTClockSource(LL_RCC_USART1_CLKSOURCE_PCLK1);
+  LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);
 }
 
 /* USER CODE BEGIN 4 */
+
+void usart2_rx(uint8_t x) {
+	LL_USART_TransmitData8(USART1, x);	//re-route usart2 to usart1
+	return;
+}
+
+void usart1_rx(uint8_t x) {
+	LL_USART_TransmitData8(USART2, x);	//re-route usart1 to usart2
+	return;
+}
 
 /* USER CODE END 4 */
 
