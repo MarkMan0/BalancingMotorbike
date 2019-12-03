@@ -5,6 +5,8 @@
 
 #define DEG_TO_RAD (57.2957795131)
 
+//calculates roll and pitch values
+//uses a complementary filter the combine both accelerometer and gyro data
 void calcOrientation(Orientation* o){
 
 	const float sampleT = 1.0/1000;
