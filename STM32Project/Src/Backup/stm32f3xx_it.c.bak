@@ -33,7 +33,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
- 
+#define MAXPW 20000
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -43,7 +43,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+extern uint16_t pw;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -197,35 +197,6 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32f3xx.s).                    */
 /******************************************************************************/
-
-/**
-  * @brief This function handles TIM3 global interrupt.
-  */
-#define MAXPW 20000
-extern uint16_t pw;
-void TIM3_IRQHandler(void)
-{
-  /* USER CODE BEGIN TIM3_IRQn 0 */
-	static uint8_t state = 1;
-	if(LL_TIM_IsActiveFlag_UPDATE(TIM3)) {
-
-		if(state) {
-			LL_GPIO_ResetOutputPin(GPIOB, LL_GPIO_PIN_3);
-			LL_TIM_SetAutoReload(TIM3, pw);
-		}
-		else {
-			LL_GPIO_SetOutputPin(GPIOB, LL_GPIO_PIN_3);
-			LL_TIM_SetAutoReload(TIM3, MAXPW - pw);
-		}
-		state = !state;
-		LL_TIM_ClearFlag_UPDATE(TIM3);
-	}
-
-  /* USER CODE END TIM3_IRQn 0 */
-  /* USER CODE BEGIN TIM3_IRQn 1 */
-
-  /* USER CODE END TIM3_IRQn 1 */
-}
 
 /**
   * @brief This function handles USART1 global interrupt / USART1 wake-up interrupt through EXT line 25.

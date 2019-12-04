@@ -117,9 +117,12 @@ int main(void)
   USART1_register_RXNE_callback(usart1_rx);
   LL_USART_EnableIT_RXNE(USART1);
 
-  LL_TIM_EnableIT_UPDATE(TIM3);
-  LL_TIM_EnableCounter(TIM3);
+  //LL_TIM_EnableIT_UPDATE(TIM3);
 
+
+  //LL_TIM_EnableCounter(TIM17);
+  LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH2);
+  LL_TIM_EnableCounter(TIM3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -179,10 +182,14 @@ void SystemClock_Config(void)
 
 void usart2_rx(uint8_t x) {
 	if(x == 'a') {
-		pw += 10;
+		pw += 100;
+		if(pw > 2400)
+			pw = 2400;
 	}
 	if(x == 'd') {
-		pw -= 10;
+		pw -= 100;
+		if(pw < 500)
+			pw = 500;
 	}
 
 	LL_USART_TransmitData8(USART1, x);	//re-route usart2 to usart1

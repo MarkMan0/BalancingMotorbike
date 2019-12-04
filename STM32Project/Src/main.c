@@ -117,9 +117,12 @@ int main(void)
   USART1_register_RXNE_callback(usart1_rx);
   LL_USART_EnableIT_RXNE(USART1);
 
-  LL_TIM_EnableIT_UPDATE(TIM3);
-  LL_TIM_EnableCounter(TIM3);
+  //LL_TIM_EnableIT_UPDATE(TIM3);
 
+
+  //LL_TIM_EnableCounter(TIM17);
+  LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH2);
+  LL_TIM_EnableCounter(TIM3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
