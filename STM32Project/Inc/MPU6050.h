@@ -5,6 +5,8 @@
 #include "hpf1.h"
 #include <stdint.h>
 
+
+//struct to monitor the internal state of the MPU6050
 typedef struct _MPU6050 {
 
 	int16_t accBuff[3];
@@ -16,10 +18,9 @@ typedef struct _MPU6050 {
 } MPU6050;
 
 
-//this function manages the reading from the I2C device
-void readData(MPU6050* mpu);
-void readForRoll(MPU6050* mpu);
-void MPU6050init(MPU6050* mpu);
+void readData(MPU6050* mpu);	//read all 6 axis
+void readForRoll(MPU6050* mpu);	//read Y axis only
+void MPU6050init(MPU6050* mpu);	//call on startup
 
 
 #endif

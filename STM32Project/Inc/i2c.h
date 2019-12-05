@@ -38,9 +38,13 @@ void MX_I2C1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
+//write an 8-bit value to specified slave and register
 void i2c_write(uint8_t slave_addr, uint8_t reg_addr, uint8_t data);
+//read n bytes from slave, with start address
 void i2c_read_n(uint8_t slave_addr, uint8_t reg_addr, uint8_t* buffer, uint8_t n);
+//optimized for reading 6 bytes into 3 int16 variables, automatically converts endian (swaps bytes)
 void i2c_read3_int16(uint8_t slave_addr, uint8_t register_addr, uint8_t* buffer);
+//reads an int16 value to the address pointed to by buffer
 void i2c_read_int16(uint8_t slave_addr, uint8_t register_addr, uint8_t* buffer);
 /* USER CODE END Prototypes */
 

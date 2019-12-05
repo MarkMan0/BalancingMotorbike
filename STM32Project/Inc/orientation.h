@@ -7,15 +7,14 @@
 
 typedef struct _Orientation {
 
-	//helper
-	float gIntegrated[3];
-
-	float roll, pitch;
+	float roll, pitch, yaw;
 	MPU6050 *mpu;
 } Orientation;
 
-
+//calculate all 6 axes
 void calcOrientation(Orientation* o);
+
+//calculate roll only, using y axis accelerometer and gyroscope data
 void calcRoll(Orientation* o);
 
 #endif
