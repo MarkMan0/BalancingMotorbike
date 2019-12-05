@@ -6,11 +6,8 @@
 
 typedef struct _MPU6050 {
 
-	float acc[3];
-	float g[3];
-
-	LPF1 lpf[3];
-	HPF1 hpf[3];
+	float accBuff[3];
+	float gBuff[3];
 
 } MPU6050;
 

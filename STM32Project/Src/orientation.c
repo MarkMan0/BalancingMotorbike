@@ -11,7 +11,7 @@ void calcOrientation(Orientation* o){
 
 	const float sampleT = 1.0/1000;
 
-	//Normalize accelerometer vector
+	/*//Normalize accelerometer vector
 
 	//magnitude = sqrt( ax^2 + ay^2 + az^2)
 	float magnitude = sqrt(
@@ -28,4 +28,4 @@ void calcOrientation(Orientation* o){
 	//calculate the roll and pitch using, by combining both data
 	o->roll = asinf(o->mpu.acc[1]/magnitude) + o->gIntegrated[1]*DEG_TO_RAD;
 	o->pitch = asinf(0.0 - o->mpu.acc[0]/magnitude) + o->gIntegrated[0] * DEG_TO_RAD;
-}
+*/}

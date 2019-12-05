@@ -82,6 +82,49 @@ void i2c_read_n(uint8_t slave_addr, uint8_t register_addr, uint8_t* buffer, uint
 	I2C1->ICR |= (1 << 4);	//clear NACK flag
 }
 
+void i2c_read3_int16(uint8_t slave_addr, uint8_t register_addr, uint8_t* buffer) {
+
+	//send START, sends the SLAVE address
+	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 1, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
+
+	//send register address which will be read
+	while(!LL_I2C_IsActiveFlag_STOP(I2C1))
+	{
+		if(LL_I2C_IsActiveFlag_TXIS(I2C1))
+		{
+			LL_I2C_TransmitData8(I2C1, register_addr);
+		}
+	}
+	LL_I2C_ClearFlag_STOP(I2C1);
+	while(LL_I2C_IsActiveFlag_STOP(I2C1)){}
+	//end of first half
+
+
+	//send START and address, also set read bit
+	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 1, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_READ);
+
+
+	while(!LL_I2C_IsActiveFlag_RXNE(I2C1)) {}	//wait until for RXNE to go to true
+	buffer[1] = LL_I2C_ReceiveData8(I2C1);
+	while(!LL_I2C_IsActiveFlag_RXNE(I2C1)) {}	//wait until for RXNE to go to true
+	buffer[0] = LL_I2C_ReceiveData8(I2C1);
+	while(!LL_I2C_IsActiveFlag_RXNE(I2C1)) {}	//wait until for RXNE to go to true
+	buffer[3] = LL_I2C_ReceiveData8(I2C1);
+	while(!LL_I2C_IsActiveFlag_RXNE(I2C1)) {}	//wait until for RXNE to go to true
+	buffer[2] = LL_I2C_ReceiveData8(I2C1);
+	while(!LL_I2C_IsActiveFlag_RXNE(I2C1)) {}	//wait until for RXNE to go to true
+	buffer[5] = LL_I2C_ReceiveData8(I2C1);
+	while(!LL_I2C_IsActiveFlag_RXNE(I2C1)) {}	//wait until for RXNE to go to true
+	buffer[4] = LL_I2C_ReceiveData8(I2C1);
+
+
+	while(!LL_I2C_IsActiveFlag_STOP(I2C1)){};
+
+	//End of transfer
+	LL_I2C_ClearFlag_STOP(I2C1);
+	I2C1->ICR |= (1 << 4);	//clear NACK flag
+}
+
 /* USER CODE END 0 */
 
 /* I2C1 init function */
