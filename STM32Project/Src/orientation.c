@@ -19,11 +19,11 @@ void calcOrientation(Orientation* o){
 			 o->mpu.gBuff[1]*o->mpu.gScale,
 			 o->mpu.gBuff[2]*o->mpu.gScale};
 	//magnitude = sqrt( ax^2 + ay^2 + az^2)
-	float magnitude = sqrt(acc[0]*acc[0] + acc[1]*acc[1] + acc[2]*acc[2]);
+	//float magnitude = sqrt(acc[0]*acc[0] + acc[1]*acc[1] + acc[2]*acc[2]);
 	//calculate the integral of the gyroscope
 
 
-	o->roll = coef*(g[1]*DEG_TO_RAD*sampleT + o->roll) + (1.0-coef)*asinf(acc[1]/magnitude);
-	o->pitch = coef*(g[0]*DEG_TO_RAD*sampleT + o->pitch) + (1.0-coef)*asinf(0.0 - acc[0]/magnitude);
+	o->roll = coef*(g[1]*DEG_TO_RAD*sampleT + o->roll) + (1.0-coef)*asinf(acc[1]);
+	o->pitch = coef*(g[0]*DEG_TO_RAD*sampleT + o->pitch) + (1.0-coef)*asinf(0.0 - acc[0]);
 
 }
