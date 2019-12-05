@@ -129,7 +129,7 @@ int main(void)
   {
 	  readForRoll(&mpu);
 	  calcRoll(&o);
-
+	  LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_3);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
