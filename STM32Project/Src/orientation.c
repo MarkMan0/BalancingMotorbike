@@ -30,3 +30,16 @@ void calcOrientation(Orientation* o){
 	//o->roll = asinf(acc[1]);
 	roll = o->roll*DEG_TO_RAD;
 }
+
+void calcRoll(Orientation* o) {
+
+	const float sampleT = 1.0/1000;
+	const float coef = 0.95;
+
+	float acc = o->mpu->accBuff[1]*o->mpu->accScale,
+			g = o->mpu->gBuff[1]*o->mpu->gScale;
+
+	o->roll = coef*(g/DEG_TO_RAD*sampleT + o->roll) + (1.0-coef)*asinf(acc);
+	if(isnanf(o->roll)) o->roll = 0.0;
+	//roll = o->roll*DEG_TO_RAD;
+}

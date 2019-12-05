@@ -4,14 +4,20 @@
 #include <string.h>
 #include "lpf1.h"
 
+#include "MPU6050_Registers.h"
+
 //reads all 6 data via I2C
 void readData(MPU6050* mpu) {
 	i2c_read3_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_XOUT_H,(uint8_t*) mpu->accBuff);
 
 	i2c_read3_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, (uint8_t*) mpu->gBuff);
-
-
 }
+
+void readForRoll(MPU6050* mpu) {
+	i2c_read_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_YOUT_H, (uint8_t*)(mpu->accBuff+1));
+	i2c_read_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_YOUT_H, (uint8_t*)(mpu->gBuff+1));
+}
+
 
 //sets the init condition in the MPU, via I2C
 //sets up gains and internal filters

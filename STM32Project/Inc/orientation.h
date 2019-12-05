@@ -16,6 +16,6 @@ typedef struct _Orientation {
 
 
 void calcOrientation(Orientation* o);
-
+void calcRoll(Orientation* o);
 
 #endif

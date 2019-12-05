@@ -127,8 +127,8 @@ int main(void)
 
   while (1)
   {
-	  readData(&mpu);
-	  calcOrientation(&o);
+	  readForRoll(&mpu);
+	  calcRoll(&o);
 
     /* USER CODE END WHILE */
 
