@@ -9,6 +9,9 @@ typedef struct _MPU6050 {
 	float accBuff[3];
 	float gBuff[3];
 
+	float accScale;
+	float gScale;
+
 } MPU6050;
 
 

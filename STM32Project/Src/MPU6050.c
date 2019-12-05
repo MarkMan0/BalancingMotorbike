@@ -18,6 +18,7 @@ void readData(MPU6050* mpu) {
 void MPU6050init(MPU6050* mpu) {
 
 	//turn off hpf and lpf (gain=1)
-
+	mpu->accScale = 1.0/16384.0;
+	mpu->gScale = 1.0/131.0;
 	i2c_write(MPU6050_ADDRESS, MPU_6050_REG_PWR_MGMT_1, 0x00);	//reset MPU
 }
