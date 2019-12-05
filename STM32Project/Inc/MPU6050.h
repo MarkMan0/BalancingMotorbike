@@ -3,11 +3,12 @@
 
 #include "lpf1.h"
 #include "hpf1.h"
+#include <stdint.h>
 
 typedef struct _MPU6050 {
 
-	float accBuff[3];
-	float gBuff[3];
+	int16_t accBuff[3];
+	int16_t gBuff[3];
 
 	float accScale;
 	float gScale;

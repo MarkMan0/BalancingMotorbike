@@ -101,7 +101,7 @@ void i2c_read3_int16(uint8_t slave_addr, uint8_t register_addr, uint8_t* buffer)
 
 
 	//send START and address, also set read bit
-	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 1, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_READ);
+	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 6, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_READ);
 
 
 	while(!LL_I2C_IsActiveFlag_RXNE(I2C1)) {}	//wait until for RXNE to go to true

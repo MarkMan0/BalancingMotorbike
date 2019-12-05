@@ -11,7 +11,7 @@ typedef struct _Orientation {
 	float gIntegrated[3];
 
 	float roll, pitch;
-	MPU6050 mpu;
+	MPU6050 *mpu;
 } Orientation;
 
 

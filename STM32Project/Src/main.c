@@ -31,6 +31,7 @@
 #include "stm32f3xx_ll_usart.h"
 #include "callbacks.h"
 #include "MPU6050.h"
+#include "orientation.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -110,21 +111,24 @@ int main(void)
   /* USER CODE BEGIN 2 */
   //register USART callbacks and enable interrupts
   USART2_register_RXNE_callback(usart2_rx);
-  LL_USART_EnableIT_RXNE(USART2);
+  //LL_USART_EnableIT_RXNE(USART2);
 
   USART1_register_RXNE_callback(usart1_rx);
-  LL_USART_EnableIT_RXNE(USART1);
+  //LL_USART_EnableIT_RXNE(USART1);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  Orientation o = { 0 };
   MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
   MPU6050init(&mpu);
+  o.mpu = &mpu;
+
   while (1)
   {
 	  readData(&mpu);
-
+	  calcOrientation(&o);
 
     /* USER CODE END WHILE */
 
