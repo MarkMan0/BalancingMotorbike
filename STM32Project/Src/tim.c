@@ -34,9 +34,9 @@ void MX_TIM3_Init(void)
   /* Peripheral clock enable */
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM3);
 
-  TIM_InitStruct.Prescaler = 31;
+  TIM_InitStruct.Prescaler = 160;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 10;
+  TIM_InitStruct.Autoreload = 100;
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   LL_TIM_Init(TIM3, &TIM_InitStruct);
   LL_TIM_EnableARRPreload(TIM3);
@@ -76,9 +76,9 @@ void MX_TIM6_Init(void)
   NVIC_SetPriority(TIM6_DAC1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   NVIC_EnableIRQ(TIM6_DAC1_IRQn);
 
-  TIM_InitStruct.Prescaler = 1000;
+  TIM_InitStruct.Prescaler = 29999;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 2000;
+  TIM_InitStruct.Autoreload = 100;
   LL_TIM_Init(TIM6, &TIM_InitStruct);
   LL_TIM_EnableARRPreload(TIM6);
   LL_TIM_SetTriggerOutput(TIM6, LL_TIM_TRGO_UPDATE);
