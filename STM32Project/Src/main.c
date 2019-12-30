@@ -21,6 +21,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "i2c.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -66,7 +67,7 @@ void usart1_rx(uint8_t);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+volatile uint16_t pw = 1500;
 /* USER CODE END 0 */
 
 /**
@@ -107,6 +108,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_I2C1_Init();
+  MX_TIM3_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   //register USART callbacks and enable interrupts
@@ -116,6 +118,12 @@ int main(void)
   USART1_register_RXNE_callback(usart1_rx);
   //LL_USART_EnableIT_RXNE(USART1);
 
+  //LL_TIM_EnableIT_UPDATE(TIM3);
+
+
+  //LL_TIM_EnableCounter(TIM17);
+  LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH2);
+  LL_TIM_EnableCounter(TIM3);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -177,6 +185,17 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 void usart2_rx(uint8_t x) {
+	if(x == 'a') {
+		pw += 100;
+		if(pw > 2400)
+			pw = 2400;
+	}
+	if(x == 'd') {
+		pw -= 100;
+		if(pw < 500)
+			pw = 500;
+	}
+
 	LL_USART_TransmitData8(USART1, x);	//re-route usart2 to usart1
 	return;
 }
