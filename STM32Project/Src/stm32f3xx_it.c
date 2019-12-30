@@ -199,6 +199,24 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles ADC1 and ADC2 interrupts.
+  */
+void ADC1_2_IRQHandler(void)
+{
+  /* USER CODE BEGIN ADC1_2_IRQn 0 */
+	extern float res;
+	if(LL_ADC_IsActiveFlag_EOC(ADC1)) {
+		LL_ADC_ClearFlag_EOC(ADC1);
+		res = LL_ADC_REG_ReadConversionData12(ADC1)/4097.0f*3.3f;
+	}
+  /* USER CODE END ADC1_2_IRQn 0 */
+  
+  /* USER CODE BEGIN ADC1_2_IRQn 1 */
+
+  /* USER CODE END ADC1_2_IRQn 1 */
+}
+
+/**
   * @brief This function handles USART1 global interrupt / USART1 wake-up interrupt through EXT line 25.
   */
 void USART1_IRQHandler(void)
@@ -230,6 +248,23 @@ void USART2_IRQHandler(void)
   /* USER CODE BEGIN USART2_IRQn 1 */
 
   /* USER CODE END USART2_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM6 global and DAC1 underrun error interrupts.
+  */
+void TIM6_DAC1_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM6_DAC1_IRQn 0 */
+	if(LL_TIM_IsActiveFlag_UPDATE(TIM6)) {
+		LL_TIM_ClearFlag_UPDATE(TIM6);
+	}
+
+  /* USER CODE END TIM6_DAC1_IRQn 0 */
+  
+  /* USER CODE BEGIN TIM6_DAC1_IRQn 1 */
+
+  /* USER CODE END TIM6_DAC1_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
