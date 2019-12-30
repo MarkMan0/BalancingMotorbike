@@ -69,6 +69,7 @@ void usart1_rx(uint8_t);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 volatile uint16_t pw = 1500;
+uint16_t servoPW = 0;
 /* USER CODE END 0 */
 
 /**
@@ -113,6 +114,7 @@ int main(void)
   MX_TIM6_Init();
   MX_ADC1_Init();
   MX_TIM3_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   LL_TIM_EnableCounter(TIM6);
@@ -142,7 +144,12 @@ int main(void)
   //LL_TIM_EnableCounter(TIM17);
   LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH2);
   LL_TIM_OC_SetCompareCH2(TIM3, 30);
-  LL_TIM_EnableCounter(TIM3);
+  //LL_TIM_EnableCounter(TIM3);
+
+  LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
+  LL_TIM_OC_SetCompareCH2(TIM2, 0);
+  LL_TIM_EnableCounter(TIM2);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -160,7 +167,7 @@ int main(void)
 	  //LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_3);
 	  //LL_mDelay(500);
 	  int pw = res/3.3*100;
-	  LL_TIM_OC_SetCompareCH2(TIM3, pw);
+	  LL_TIM_OC_SetCompareCH1(TIM2, servoPW);
 
 
     /* USER CODE END WHILE */
