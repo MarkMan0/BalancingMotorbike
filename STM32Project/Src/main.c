@@ -55,7 +55,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-volatile float res = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -166,8 +166,7 @@ int main(void)
 	  //calcRoll(&o);
 	  //LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_3);
 	  //LL_mDelay(500);
-	  int pw = res/3.3*100;
-	  LL_TIM_OC_SetCompareCH1(TIM2, servoPW);
+
 
 
     /* USER CODE END WHILE */
