@@ -34,6 +34,7 @@
 #include "callbacks.h"
 #include "MPU6050.h"
 #include "orientation.h"
+#include "MovementController.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -68,8 +69,7 @@ void usart1_rx(uint8_t);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-volatile uint16_t pw = 1500;
-uint16_t servoPW = 0;
+
 /* USER CODE END 0 */
 
 /**
@@ -226,17 +226,6 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 void usart2_rx(uint8_t x) {
-	if(x == 'a') {
-		pw += 100;
-		if(pw > 2400)
-			pw = 2400;
-	}
-	if(x == 'd') {
-		pw -= 100;
-		if(pw < 500)
-			pw = 500;
-	}
-
 	LL_USART_TransmitData8(USART1, x);	//re-route usart2 to usart1
 	return;
 }
