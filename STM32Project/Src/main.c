@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "i2c.h"
 #include "tim.h"
 #include "usart.h"
@@ -108,15 +109,32 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_I2C1_Init();
-  MX_TIM3_Init();
   MX_USART1_UART_Init();
+  MX_TIM6_Init();
+  MX_ADC1_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+
+  LL_TIM_EnableCounter(TIM6);
+
+
   //register USART callbacks and enable interrupts
   USART2_register_RXNE_callback(usart2_rx);
   //LL_USART_EnableIT_RXNE(USART2);
 
   USART1_register_RXNE_callback(usart1_rx);
   //LL_USART_EnableIT_RXNE(USART1);
+  LL_ADC_EnableIT_EOC(ADC1);
+
+
+
+  LL_ADC_EnableInternalRegulator(ADC1);
+  LL_mDelay(500);
+  LL_ADC_StartCalibration(ADC1, LL_ADC_SINGLE_ENDED);
+  LL_mDelay(500);
+  LL_ADC_Enable(ADC1);
+  LL_mDelay(500);
+  LL_ADC_REG_StartConversion(ADC1);
 
   //LL_TIM_EnableIT_UPDATE(TIM3);
 
@@ -130,14 +148,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   Orientation o = { 0 };
   MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
-  MPU6050init(&mpu);
+  //MPU6050init(&mpu);
   o.mpu = &mpu;
 
   while (1)
   {
-	  readForRoll(&mpu);
-	  calcRoll(&o);
-	  LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_3);
+
+	  //readForRoll(&mpu);
+	  //calcRoll(&o);
+	  //LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_3);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -165,6 +184,14 @@ void SystemClock_Config(void)
     
   }
   LL_RCC_HSI_SetCalibTrimming(16);
+  LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSI_DIV_2, LL_RCC_PLL_MUL_4);
+  LL_RCC_PLL_Enable();
+
+   /* Wait till PLL is ready */
+  while(LL_RCC_PLL_IsReady() != 1)
+  {
+    
+  }
   LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
   LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
   LL_RCC_SetAPB2Prescaler(LL_RCC_APB1_DIV_1);
@@ -180,6 +207,7 @@ void SystemClock_Config(void)
   LL_SetSystemCoreClock(8000000);
   LL_RCC_SetUSARTClockSource(LL_RCC_USART1_CLKSOURCE_PCLK1);
   LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);
+  LL_RCC_SetADCClockSource(LL_RCC_ADC12_CLKSRC_PLL_DIV_1);
 }
 
 /* USER CODE BEGIN 4 */
