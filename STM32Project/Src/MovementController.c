@@ -13,9 +13,13 @@ void updateServoPW(MovementControl *MC) {
 void updateMotorPWM(MovementControl *MC) {
 	if(MC->dir == DIR_FORWARD) {
 		//set CH1 to output PWM signal and CH2 to output 0
+		LL_TIM_OC_SetCompareCH2(TIM3, 0);
+		LL_TIM_OC_SetCompareCH1(TIM3, MC->motorPW);
 	}
 	else {
 		//set CH1 to zero and CH2 to PWM
+		LL_TIM_OC_SetCompareCH1(TIM3, 0);
+		LL_TIM_OC_SetCompareCH2(TIM3, MC->motorPW);
 	}
 }
 
@@ -52,11 +56,13 @@ void MC_handleCommand(MovementControl *MC, uint8_t* cmd) {
 		int16_t spd = getIntFromCmd(cmd);
 		MC->motorPW = (uint16_t)(spd/100.0 * MOTOR_PW_MAX);
 		MC->motorPW = CONSTRAIN(MC->motorPW, MOTOR_PW_MIN, MOTOR_PW_MAX);
+
 		if(cmd[0] == 'w') {
 			MC->dir = DIR_FORWARD;
 		}
 		else {
 			MC->dir = DIR_REVERSE;
 		}
+		updateMotorPWM(MC);
 	}
 }

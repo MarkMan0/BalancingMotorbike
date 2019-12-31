@@ -137,13 +137,9 @@ int main(void)
   LL_mDelay(500);
   LL_ADC_REG_StartConversion(ADC1);
 
-  //LL_TIM_EnableIT_UPDATE(TIM3);
-
-
-  //LL_TIM_EnableCounter(TIM17);
+  LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH1);
   LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH2);
-  LL_TIM_OC_SetCompareCH2(TIM3, 30);
-  //LL_TIM_EnableCounter(TIM3);
+  LL_TIM_EnableCounter(TIM3);
 
   LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
   LL_TIM_OC_SetCompareCH2(TIM2, 0);
