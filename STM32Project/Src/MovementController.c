@@ -1,6 +1,6 @@
 #include "MovementController.h"
 #include "main.h"
-#include "string.h"
+#include "stdlib.h"
 
 #define CONSTRAIN(VAR, MIN, MAX) ( VAR < MIN ? MIN : (VAR > MAX ? MAX : VAR))
 
@@ -23,8 +23,10 @@ int16_t getIntFromCmd(uint8_t* cmd) {
 	++cmd;	//skip first char, which is a letter
 	size_t i = 0;
 	while(cmd[i] != '\0') {
-		if(cmd[i] == '\n')
-			cmd[i] == '\0';	//replace trailing newline char, if exists
+		if(cmd[i] == '\n' || cmd[i] == '\r') {
+			cmd[i] = '\0';	//replace trailing newline char, if exists
+			break;
+		}
 		++i;
 	}
 
@@ -46,10 +48,10 @@ void MC_handleCommand(MovementControl *MC, uint8_t* cmd) {
 		updateServoPW(MC);
 	}
 	else if(cmd[0] == 'w' || cmd[0] == 's') {
-		//move forward with desired speed
+		//move forward/backward with desired speed
 		int16_t spd = getIntFromCmd(cmd);
 		MC->motorPW = (uint16_t)(spd/100.0 * MOTOR_PW_MAX);
-
+		MC->motorPW = CONSTRAIN(MC->motorPW, MOTOR_PW_MIN, MOTOR_PW_MAX);
 		if(cmd[0] == 'w') {
 			MC->dir = DIR_FORWARD;
 		}

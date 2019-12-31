@@ -44,7 +44,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define USART_RX_BUFLEN 	(10)
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -62,8 +62,8 @@
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
-void usart2_rx(uint8_t);
-void usart1_rx(uint8_t);
+void usart_rx(uint8_t);
+void usart_rx(uint8_t);
 
 /* USER CODE END PFP */
 
@@ -121,15 +121,14 @@ int main(void)
 
 
   //register USART callbacks and enable interrupts
-  USART2_register_RXNE_callback(usart2_rx);
-  //LL_USART_EnableIT_RXNE(USART2);
+  USART2_register_RXNE_callback(usart_rx);
+  LL_USART_EnableIT_RXNE(USART2);
 
-  USART1_register_RXNE_callback(usart1_rx);
-  //LL_USART_EnableIT_RXNE(USART1);
+  USART1_register_RXNE_callback(usart_rx);
+  LL_USART_EnableIT_RXNE(USART1);
+
+
   LL_ADC_EnableIT_EOC(ADC1);
-
-
-
   LL_ADC_EnableInternalRegulator(ADC1);
   LL_mDelay(500);
   LL_ADC_StartCalibration(ADC1, LL_ADC_SINGLE_ENDED);
@@ -224,13 +223,19 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-void usart2_rx(uint8_t x) {
-	LL_USART_TransmitData8(USART1, x);	//re-route usart2 to usart1
-	return;
-}
-
-void usart1_rx(uint8_t x) {
-	LL_USART_TransmitData8(USART2, x);	//re-route usart1 to usart2
+void usart_rx(uint8_t x) {
+	static uint8_t buffer[USART_RX_BUFLEN];
+	static uint8_t ind = 0;
+	if(ind < USART_RX_BUFLEN) {
+		buffer[ind++] = x;
+	} else {
+		ind = 0;
+	}
+	if(x == '\n' || x == '\r'  || x == '\0') {
+		//end of command
+		MC_handleCommand(&MC, buffer);
+		ind = 0;
+	}
 	return;
 }
 

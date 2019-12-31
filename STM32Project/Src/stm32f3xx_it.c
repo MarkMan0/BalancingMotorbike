@@ -204,10 +204,10 @@ void SysTick_Handler(void)
 void ADC1_2_IRQHandler(void)
 {
   /* USER CODE BEGIN ADC1_2_IRQn 0 */
-	extern float res;
+	//extern float res;
 	if(LL_ADC_IsActiveFlag_EOC(ADC1)) {
 		LL_ADC_ClearFlag_EOC(ADC1);
-		res = LL_ADC_REG_ReadConversionData12(ADC1)/4097.0f*3.3f;
+		//res = LL_ADC_REG_ReadConversionData12(ADC1)/4097.0f*3.3f;
 	}
   /* USER CODE END ADC1_2_IRQn 0 */
   
