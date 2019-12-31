@@ -37,32 +37,33 @@ int16_t getIntFromCmd(uint8_t* cmd) {
 	return atoi(cmd);
 }
 
+int16_t map(int16_t x, int16_t in_min, int16_t in_max, int16_t out_min, int16_t out_max) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+
 void MC_handleCommand(MovementControl *MC, uint8_t* cmd) {
 
-	if(cmd[0] == 'a') {
+	if(cmd[0] == 'p') {
 		//turn left
-		MC->servoPW += SERVO_PW_STEP;
+		int16_t pos = getIntFromCmd(cmd);
+		MC->servoPW = map(pos, -50, 50, SERVO_PW_MIN, SERVO_PW_MAX);
 		MC->servoPW = CONSTRAIN(MC->servoPW, SERVO_PW_MIN, SERVO_PW_MAX);
+
 		updateServoPW(MC);
 	}
-	else if(cmd[0] == 'd') {
-		//turn right
-		MC->servoPW -= SERVO_PW_STEP;
-		MC->servoPW = CONSTRAIN(MC->servoPW, SERVO_PW_MIN, SERVO_PW_MAX);
-		updateServoPW(MC);
-	}
-	else if(cmd[0] == 'w' || cmd[0] == 's') {
+	else if(cmd[0] == 's') {
 		//move forward/backward with desired speed
 		int16_t spd = getIntFromCmd(cmd);
+		if(spd >= 0) {
+			MC->dir = DIR_FORWARD;
+		} else {
+			MC->dir = DIR_REVERSE;
+		}
+		spd = abs(spd);
 		MC->motorPW = (uint16_t)(spd/100.0 * MOTOR_PW_MAX);
 		MC->motorPW = CONSTRAIN(MC->motorPW, MOTOR_PW_MIN, MOTOR_PW_MAX);
 
-		if(cmd[0] == 'w') {
-			MC->dir = DIR_FORWARD;
-		}
-		else {
-			MC->dir = DIR_REVERSE;
-		}
 		updateMotorPWM(MC);
 	}
 }
