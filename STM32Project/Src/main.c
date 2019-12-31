@@ -142,7 +142,7 @@ int main(void)
   LL_TIM_EnableCounter(TIM3);
 
   LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
-  LL_TIM_OC_SetCompareCH2(TIM2, 0);
+  LL_TIM_OC_SetCompareCH1(TIM2, SERVO_CENTER);
   LL_TIM_EnableCounter(TIM2);
 
   /* USER CODE END 2 */
