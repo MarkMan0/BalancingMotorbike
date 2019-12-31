@@ -38,7 +38,7 @@ int16_t getIntFromCmd(uint8_t* cmd) {
 }
 
 int16_t map(int16_t x, int16_t in_min, int16_t in_max, int16_t out_min, int16_t out_max) {
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
 
@@ -67,3 +67,20 @@ void MC_handleCommand(MovementControl *MC, uint8_t* cmd) {
 		updateMotorPWM(MC);
 	}
 }
+
+
+void initServo() {
+	LL_TIM_OC_SetCompareCH1(TIM2, SERVO_CENTER);
+	LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
+	LL_TIM_EnableCounter(TIM2);
+}
+
+void initRearMotor() {
+	  LL_TIM_OC_SetCompareCH1(TIM3, 0);
+	  LL_TIM_OC_SetCompareCH2(TIM3, 0);
+	  LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH1);
+	  LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH2);
+	  LL_TIM_EnableCounter(TIM3);
+}
+
+

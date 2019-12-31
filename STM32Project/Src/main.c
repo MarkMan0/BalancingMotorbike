@@ -63,7 +63,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 void usart_rx(uint8_t);
-void usart_rx(uint8_t);
+void initADC();
 
 /* USER CODE END PFP */
 
@@ -117,8 +117,6 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
-  LL_TIM_EnableCounter(TIM6);
-
 
   //register USART callbacks and enable interrupts
   USART2_register_RXNE_callback(usart_rx);
@@ -128,22 +126,11 @@ int main(void)
   LL_USART_EnableIT_RXNE(USART1);
 
 
-  LL_ADC_EnableIT_EOC(ADC1);
-  LL_ADC_EnableInternalRegulator(ADC1);
-  LL_mDelay(500);
-  LL_ADC_StartCalibration(ADC1, LL_ADC_SINGLE_ENDED);
-  LL_mDelay(500);
-  LL_ADC_Enable(ADC1);
-  LL_mDelay(500);
-  LL_ADC_REG_StartConversion(ADC1);
 
-  LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH1);
-  LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH2);
-  LL_TIM_EnableCounter(TIM3);
+  initADC();
+  initServo();
+  initRearMotor();
 
-  LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
-  LL_TIM_OC_SetCompareCH1(TIM2, SERVO_CENTER);
-  LL_TIM_EnableCounter(TIM2);
 
   /* USER CODE END 2 */
 
@@ -233,6 +220,27 @@ void usart_rx(uint8_t x) {
 		ind = 0;
 	}
 	return;
+}
+
+void initADC() {
+
+	LL_ADC_EnableInternalRegulator(ADC1);
+	LL_mDelay(1);	//wait at least 10us for regulator
+
+	while(!LL_ADC_IsInternalRegulatorEnabled(ADC1)) {}	//ensure regulator is on
+	while(LL_ADC_IsEnabled(ADC1)) {}	//if enabled, halt
+	LL_ADC_StartCalibration(ADC1, LL_ADC_SINGLE_ENDED);
+	while(LL_ADC_IsCalibrationOnGoing(ADC1)) {} //wait for end of calibration
+	LL_mDelay(10);
+
+	LL_ADC_EnableIT_EOC(ADC1); //enable interrupt
+
+	LL_ADC_Enable(ADC1);
+
+	while(!LL_ADC_IsActiveFlag_ADRDY(ADC1)) {}	//wait for ADC ready
+
+	LL_ADC_REG_StartConversion(ADC1);	//enable conversions
+	LL_TIM_EnableCounter(TIM6);			//start timer
 }
 
 /* USER CODE END 4 */
