@@ -64,11 +64,14 @@ void SystemClock_Config(void);
 
 void usart_rx(uint8_t);
 void initADC();
+void initDMA(uint32_t toAddr);
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+uint16_t dest;
 
 /* USER CODE END 0 */
 
@@ -117,13 +120,15 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
+  initDMA((uint32_t) (&dest));
+
 
   //register USART callbacks and enable interrupts
   USART2_register_RXNE_callback(usart_rx);
-  LL_USART_EnableIT_RXNE(USART2);
+  //LL_USART_EnableIT_RXNE(USART2);
 
   USART1_register_RXNE_callback(usart_rx);
-  LL_USART_EnableIT_RXNE(USART1);
+  //LL_USART_EnableIT_RXNE(USART1);
 
 
 
@@ -241,6 +246,24 @@ void initADC() {
 
 	LL_ADC_REG_StartConversion(ADC1);	//enable conversions
 	LL_TIM_EnableCounter(TIM6);			//start timer
+}
+
+void initDMA(uint32_t addr) {
+
+	  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1);
+
+	  LL_DMA_SetMemoryAddress(DMA1, LL_DMA_CHANNEL_1, addr);
+
+	  LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_1, LL_ADC_DMA_GetRegAddr(ADC1, LL_ADC_DMA_REG_REGULAR_DATA));
+	  LL_DMA_SetDataTransferDirection(DMA1, LL_DMA_CHANNEL_1, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
+	  LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PRIORITY_HIGH);
+	  LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MODE_CIRCULAR);
+	  LL_DMA_SetPeriphIncMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PERIPH_NOINCREMENT);
+	  LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MEMORY_NOINCREMENT);
+	  LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PDATAALIGN_HALFWORD);
+	  LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MDATAALIGN_HALFWORD);
+	  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, 1);
+	  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
 }
 
 /* USER CODE END 4 */
