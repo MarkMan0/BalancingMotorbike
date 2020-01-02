@@ -154,10 +154,6 @@ int main(void)
 
 	  //readForRoll(&mpu);
 	  //calcRoll(&o);
-	  //LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_3);
-	  //LL_mDelay(500);
-
-
 
     /* USER CODE END WHILE */
 

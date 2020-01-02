@@ -2,7 +2,6 @@
 #define _MPU6050_H 1
 
 #include "lpf1.h"
-#include "hpf1.h"
 #include <stdint.h>
 
 
