@@ -5,7 +5,7 @@
 #include "math.h"
 
 
-MovementControl MC = {0};	//global variable initialization
+volatile MovementControl MC = {0};	//global variable initialization
 
 void updateServoPW(MovementControl *MC) {
 	LL_TIM_OC_SetCompareCH1(TIM2, MC->servoPW);

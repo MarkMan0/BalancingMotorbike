@@ -227,7 +227,7 @@ void usart_rx(uint8_t x) {
 	}
 	if(x == '\n' || x == '\r'  || x == '\0') {
 		//end of command
-		MC_handleCommand(&MC, buffer);
+		MC_handleCommand((MovementControl*) &MC, buffer);
 		ind = 0;
 	}
 	return;

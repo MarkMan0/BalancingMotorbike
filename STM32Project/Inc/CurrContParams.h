@@ -11,6 +11,6 @@ typedef struct _CurrContParams {
 
 } CurrContParams;
 
-extern CurrContParams CCParams;	//global instance
+extern volatile CurrContParams CCParams;	//global instance
 
 #endif

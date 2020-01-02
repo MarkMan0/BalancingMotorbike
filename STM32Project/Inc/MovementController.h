@@ -29,6 +29,6 @@ void MC_handleCommand(MovementControl *MC, uint8_t* cmd);
 void initServo();
 void initRearMotor();
 
-extern MovementControl MC;
+extern volatile MovementControl MC;
 
 #endif
