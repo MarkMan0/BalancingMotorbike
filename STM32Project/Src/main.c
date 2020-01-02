@@ -140,6 +140,10 @@ int main(void)
   initTIM1();
 
 
+  LL_TIM_EnableIT_UPDATE(TIM6);
+  LL_TIM_EnableCounter(TIM6);
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
