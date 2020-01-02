@@ -64,7 +64,8 @@ void SystemClock_Config(void);
 
 void usart_rx(uint8_t);
 void initADC();
-void initDMA(uint32_t toAddr);
+void initDMA(uint32_t toAddr, uint32_t sz);
+void initTIM1();
 
 /* USER CODE END PFP */
 
@@ -121,7 +122,7 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
-  initDMA((uint32_t) (&dest));
+  initDMA((uint32_t) (&dest), 2);
 
 
   //register USART callbacks and enable interrupts
@@ -136,13 +137,8 @@ int main(void)
   initADC();
   initServo();
   initRearMotor();
+  initTIM1();
 
-  LL_TIM_ClearFlag_UPDATE(TIM1);	//set by init function
-  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);	//enable PWM channels
-  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH4);
-  LL_TIM_EnableAllOutputs(TIM1);		//enable outputs
-  LL_TIM_GenerateEvent_UPDATE(TIM1);	//generate an update event to sych adc to first address in dma
-  LL_TIM_EnableCounter(TIM1);
 
   /* USER CODE END 2 */
 
@@ -256,7 +252,7 @@ void initADC() {
 	LL_TIM_EnableCounter(TIM6);			//start timer
 }
 
-void initDMA(uint32_t addr) {
+void initDMA(uint32_t addr, uint32_t sz) {
 
 	  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1);
 
@@ -270,8 +266,17 @@ void initDMA(uint32_t addr) {
 	  LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MEMORY_INCREMENT);
 	  LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PDATAALIGN_HALFWORD);
 	  LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MDATAALIGN_HALFWORD);
-	  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, 2);
+	  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, sz);
 	  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
+}
+
+void initTIM1() {
+	  LL_TIM_ClearFlag_UPDATE(TIM1);	//set by init function
+	  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);	//enable PWM channels
+	  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH4);
+	  LL_TIM_EnableAllOutputs(TIM1);		//enable outputs
+	  LL_TIM_GenerateEvent_UPDATE(TIM1);	//generate an update event to sych adc to first address in dma
+	  LL_TIM_EnableCounter(TIM1);
 }
 
 /* USER CODE END 4 */
