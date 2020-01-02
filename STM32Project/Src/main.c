@@ -71,7 +71,7 @@ void initDMA(uint32_t toAddr);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-uint16_t dest;
+uint16_t dest[2];
 
 /* USER CODE END 0 */
 
@@ -137,9 +137,11 @@ int main(void)
   initServo();
   initRearMotor();
 
-  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);
+  LL_TIM_ClearFlag_UPDATE(TIM1);	//set by init function
+  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);	//enable PWM channels
   LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH4);
-  LL_TIM_EnableAllOutputs(TIM1);
+  LL_TIM_EnableAllOutputs(TIM1);		//enable outputs
+  LL_TIM_GenerateEvent_UPDATE(TIM1);	//generate an update event to sych adc to first address in dma
   LL_TIM_EnableCounter(TIM1);
 
   /* USER CODE END 2 */
@@ -265,10 +267,10 @@ void initDMA(uint32_t addr) {
 	  LL_DMA_SetChannelPriorityLevel(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PRIORITY_HIGH);
 	  LL_DMA_SetMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MODE_CIRCULAR);
 	  LL_DMA_SetPeriphIncMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PERIPH_NOINCREMENT);
-	  LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MEMORY_NOINCREMENT);
+	  LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MEMORY_INCREMENT);
 	  LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_PDATAALIGN_HALFWORD);
 	  LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_1, LL_DMA_MDATAALIGN_HALFWORD);
-	  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, 1);
+	  LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_1, 2);
 	  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
 }
 
