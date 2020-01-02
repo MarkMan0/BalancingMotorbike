@@ -150,10 +150,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  Orientation o = { 0 };
+
   MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
   //MPU6050init(&mpu);
-  o.mpu = &mpu;
+  orientation.mpu = &mpu;
 
   while (1)
   {

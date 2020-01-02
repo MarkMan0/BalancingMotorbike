@@ -25,6 +25,8 @@
 /* USER CODE BEGIN Includes */
 #include "callbacks.h"
 #include "CurrContParams.h"
+#include "orientation.h"
+#include "BalanceContParams.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -73,6 +75,22 @@ static inline void currContLoop() {
 
 	updateFlywheelPWM((CCParams.kp * e + CCParams.lastI));		//update PWM
 }
+
+
+static inline void balanceContLoop() {
+
+	float e = -orientation.roll;
+
+	if(e < BCParams.deadzone && e > -BCParams.deadzone)
+		e = 0.0;
+
+	BCParams.lastI += BCParams.ki * BCParams.ts * e;
+
+	float sp = BCParams.kp*e + BCParams.lastI;
+	CCParams.setVal = CONSTRAIN(sp, BCParams.outMin, BCParams.outMax);
+
+}
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -283,6 +301,7 @@ void TIM7_DAC2_IRQHandler(void)
   /* USER CODE BEGIN TIM7_DAC2_IRQn 0 */
 
 	if(LL_TIM_IsActiveFlag_UPDATE(TIM7)) {
+		balanceContLoop();
 		LL_TIM_ClearFlag_UPDATE(TIM7);
 	}
 

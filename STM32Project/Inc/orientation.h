@@ -17,4 +17,7 @@ void calcOrientation(Orientation* o);
 //calculate roll only, using y axis accelerometer and gyroscope data
 void calcRoll(Orientation* o);
 
+
+extern volatile Orientation orientation;
+
 #endif

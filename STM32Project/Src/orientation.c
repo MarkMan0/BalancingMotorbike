@@ -41,3 +41,8 @@ void calcRoll(Orientation* o) {
 	o->roll = coef*(g/DEG_TO_RAD*sampleT + o->roll) + (1.0-coef)*asinf(acc);
 	if(isnanf(o->roll)) o->roll = 0.0;
 }
+
+
+
+
+volatile Orientation orientation = { 0 };
