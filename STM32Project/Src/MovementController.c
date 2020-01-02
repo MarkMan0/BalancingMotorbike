@@ -1,7 +1,7 @@
 #include "MovementController.h"
 #include "main.h"
 #include "stdlib.h"
-
+#include "CurrContParams.h"
 
 
 MovementControl MC = {0};	//global variable initialization
@@ -37,6 +37,20 @@ int16_t getIntFromCmd(uint8_t* cmd) {
 	return atoi(cmd);
 }
 
+float getFloatFromCmd(uint8_t* cmd ){
+	++cmd;	//skip first char, which is a letter
+	size_t i = 0;
+	while(cmd[i] != '\0') {
+		if(cmd[i] == '\n' || cmd[i] == '\r') {
+			cmd[i] = '\0';	//replace trailing newline char, if exists
+			break;
+		}
+		++i;
+	}
+
+	return atoff(cmd);
+}
+
 int16_t map(int16_t x, int16_t in_min, int16_t in_max, int16_t out_min, int16_t out_max) {
 	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
@@ -65,6 +79,20 @@ void MC_handleCommand(MovementControl *MC, uint8_t* cmd) {
 		MC->motorPW = CONSTRAIN(MC->motorPW, MOTOR_PW_MIN, MOTOR_PW_MAX);
 
 		updateMotorPWM(MC);
+	}
+	else if(cmd[0] == 'm') {
+		//current controller Kp
+		float val = getFloatFromCmd(cmd);
+		if(!isnanf(val) && !isinff(val)) {
+			CCParams.kp = val;
+		}
+	}
+	else if(cmd[0] == 'n') {
+		//current controller Ki param
+		float val = getFloatFromCmd(cmd);
+		if(!isnanf(val) && !isinff(val)) {
+			CCParams.ki = val;
+		}
 	}
 }
 
