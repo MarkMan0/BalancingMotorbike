@@ -35,6 +35,7 @@
 #include "MPU6050.h"
 #include "orientation.h"
 #include "MovementController.h"
+#include "CurrContParams.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -71,8 +72,6 @@ void initTIM1();
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-uint16_t dest[2];
 
 /* USER CODE END 0 */
 
@@ -122,7 +121,7 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
-  initDMA((uint32_t) (&dest), 2);
+  initDMA((uint32_t) (CCParams.adcBuff), 2);
 
 
   //register USART callbacks and enable interrupts
@@ -138,7 +137,6 @@ int main(void)
   initServo();
   initRearMotor();
   initTIM1();
-
 
   LL_TIM_EnableIT_UPDATE(TIM6);
   LL_TIM_EnableCounter(TIM6);

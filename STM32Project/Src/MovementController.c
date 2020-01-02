@@ -2,7 +2,7 @@
 #include "main.h"
 #include "stdlib.h"
 
-#define CONSTRAIN(VAR, MIN, MAX) ( VAR < MIN ? MIN : (VAR > MAX ? MAX : VAR))
+
 
 MovementControl MC = {0};	//global variable initialization
 

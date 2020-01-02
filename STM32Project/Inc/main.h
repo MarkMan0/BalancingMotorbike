@@ -90,7 +90,7 @@ void Error_Handler(void);
                                                                  0 bit  for subpriority */
 #endif
 /* USER CODE BEGIN Private defines */
-
+#define CONSTRAIN(VAR, MIN, MAX) ( (VAR) < (MIN) ? (MIN) : ( (VAR) > (MAX) ? (MAX) : (VAR)))
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
