@@ -2,6 +2,7 @@
 #include "main.h"
 #include "stdlib.h"
 #include "CurrContParams.h"
+#include "math.h"
 
 
 MovementControl MC = {0};	//global variable initialization

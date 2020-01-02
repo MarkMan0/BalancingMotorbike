@@ -119,6 +119,7 @@ int main(void)
   MX_TIM3_Init();
   MX_TIM2_Init();
   MX_TIM1_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 
   initDMA((uint32_t) (CCParams.adcBuff), 2);
@@ -140,6 +141,9 @@ int main(void)
 
   LL_TIM_EnableIT_UPDATE(TIM6);
   LL_TIM_EnableCounter(TIM6);
+
+  LL_TIM_EnableIT_UPDATE(TIM7);
+  LL_TIM_EnableCounter(TIM7);
 
 
   /* USER CODE END 2 */

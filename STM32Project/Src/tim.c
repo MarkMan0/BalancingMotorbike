@@ -203,6 +203,27 @@ void MX_TIM6_Init(void)
   LL_TIM_DisableMasterSlaveMode(TIM6);
 
 }
+/* TIM7 init function */
+void MX_TIM7_Init(void)
+{
+  LL_TIM_InitTypeDef TIM_InitStruct = {0};
+
+  /* Peripheral clock enable */
+  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_TIM7);
+
+  /* TIM7 interrupt Init */
+  NVIC_SetPriority(TIM7_DAC2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  NVIC_EnableIRQ(TIM7_DAC2_IRQn);
+
+  TIM_InitStruct.Prescaler = 15;
+  TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
+  TIM_InitStruct.Autoreload = 999;
+  LL_TIM_Init(TIM7, &TIM_InitStruct);
+  LL_TIM_EnableARRPreload(TIM7);
+  LL_TIM_SetTriggerOutput(TIM7, LL_TIM_TRGO_RESET);
+  LL_TIM_DisableMasterSlaveMode(TIM7);
+
+}
 
 /* USER CODE BEGIN 1 */
 
