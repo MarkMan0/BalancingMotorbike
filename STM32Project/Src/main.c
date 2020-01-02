@@ -118,6 +118,7 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM3_Init();
   MX_TIM2_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
   initDMA((uint32_t) (&dest));
@@ -136,6 +137,10 @@ int main(void)
   initServo();
   initRearMotor();
 
+  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);
+  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH4);
+  LL_TIM_EnableAllOutputs(TIM1);
+  LL_TIM_EnableCounter(TIM1);
 
   /* USER CODE END 2 */
 
@@ -206,6 +211,7 @@ void SystemClock_Config(void)
   LL_SetSystemCoreClock(32000000);
   LL_RCC_SetUSARTClockSource(LL_RCC_USART1_CLKSOURCE_PCLK1);
   LL_RCC_SetI2CClockSource(LL_RCC_I2C1_CLKSOURCE_HSI);
+  LL_RCC_SetTIMClockSource(LL_RCC_TIM1_CLKSOURCE_PLL);
   LL_RCC_SetADCClockSource(LL_RCC_ADC12_CLKSRC_PLL_DIV_1);
 }
 
