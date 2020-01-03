@@ -8,7 +8,7 @@
 volatile MovementControl MC = {0};	//global variable initialization
 
 void updateServoPW(MovementControl *MC) {
-	LL_TIM_OC_SetCompareCH1(TIM2, MC->servoPW);
+	LL_TIM_OC_SetCompareCH1(TIM16, MC->servoPW);
 }
 
 void updateMotorPWM(MovementControl *MC) {
@@ -99,9 +99,10 @@ void MC_handleCommand(MovementControl *MC, uint8_t* cmd) {
 
 
 void initServo() {
-	LL_TIM_OC_SetCompareCH1(TIM2, SERVO_CENTER);
-	LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
-	LL_TIM_EnableCounter(TIM2);
+	LL_TIM_OC_SetCompareCH1(TIM16, SERVO_CENTER);
+	LL_TIM_CC_EnableChannel(TIM16, LL_TIM_CHANNEL_CH1);
+	LL_TIM_EnableAllOutputs(TIM16);
+	LL_TIM_EnableCounter(TIM16);
 }
 
 void initRearMotor() {
