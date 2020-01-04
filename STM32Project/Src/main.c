@@ -31,7 +31,6 @@
 #include <string.h>
 #include <stdio.h>
 #include "stm32f3xx_ll_usart.h"
-#include "callbacks.h"
 #include "MPU6050.h"
 #include "orientation.h"
 #include "MovementController.h"
@@ -45,7 +44,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define USART_RX_BUFLEN 	(10)
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -63,7 +62,6 @@
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
-void usart_rx(uint8_t);
 void initADC();
 void initDMA(uint32_t toAddr, uint32_t sz);
 void initTIM1();
@@ -125,14 +123,8 @@ int main(void)
   initDMA((uint32_t) (CCParams.adcBuff), 2);
 
 
-  //register USART callbacks and enable interrupts
-  USART2_register_RXNE_callback(usart_rx);
   LL_USART_EnableIT_RXNE(USART2);
-
-  USART1_register_RXNE_callback(usart_rx);
   LL_USART_EnableIT_RXNE(USART1);
-
-
 
   initADC();
   initServo();
@@ -217,21 +209,6 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-void usart_rx(uint8_t x) {
-	static uint8_t buffer[USART_RX_BUFLEN];
-	static uint8_t ind = 0;
-	if(ind < USART_RX_BUFLEN) {
-		buffer[ind++] = x;
-	} else {
-		ind = 0;
-	}
-	if(x == '\n' || x == '\r'  || x == '\0') {
-		//end of command
-		MC_handleCommand((MovementControl*) &MC, buffer);
-		ind = 0;
-	}
-	return;
-}
 
 void initADC() {
 

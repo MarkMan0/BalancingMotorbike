@@ -23,9 +23,9 @@
 #include "stm32f3xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "callbacks.h"
 #include "CurrContParams.h"
 #include "orientation.h"
+#include "CommHandler.h"
 #include "BalanceContParams.h"
 /* USER CODE END Includes */
 
@@ -223,8 +223,7 @@ void USART1_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
 	if(LL_USART_IsActiveFlag_RXNE(USART1)) {
-		usart1_rxne_callback(LL_USART_ReceiveData8(USART1));
-
+		receiveCharCallback(LL_USART_ReceiveData8(USART1));
 	}
 
   /* USER CODE END USART1_IRQn 0 */
@@ -241,7 +240,7 @@ void USART2_IRQHandler(void)
   /* USER CODE BEGIN USART2_IRQn 0 */
 
 	if(LL_USART_IsActiveFlag_RXNE(USART2)) {
-		usart2_rxne_callback(LL_USART_ReceiveData8(USART2));
+		receiveCharCallback(LL_USART_ReceiveData8(USART2));
 	}
 
 
