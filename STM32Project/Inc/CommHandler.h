@@ -115,6 +115,25 @@ static inline void handleCommand(uint8_t *cmd) {
 		break;
 	}
 
+	case 'v': {
+		//pause current control loop
+		LL_TIM_DisableCounter(TIM6);
+		break;
+	}
+
+	case 'c': {
+		//restart current control loop
+		LL_TIM_SetCounter(TIM6, 0);
+		LL_TIM_EnableCounter(TIM6);
+		break;
+	}
+
+	case 'x': {
+		//reset integrator of current control loop
+		CCParams.lastI = 0.0;
+		break;
+	}
+
 	}
 
 
