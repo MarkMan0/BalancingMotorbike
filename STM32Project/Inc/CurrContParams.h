@@ -1,6 +1,8 @@
 #ifndef _CURR_CONT_PARAMS_H
 #define _CURR_CONT_PARAMS_H		1
 
+#define CURRENT_CONTROL_OPENLOOP
+
 #include "stdint.h"
 #include "main.h"
 
@@ -13,6 +15,7 @@
 typedef struct _CurrContParams {
 	float kp, ki, lastI;
 	float ts;
+	float setVal;
 	float current;
 	uint16_t adcBuff[2];
 
@@ -43,11 +46,16 @@ static inline void updateFlywheelPWM(float pw) {	//pw is between -1 and 1
 
 static inline void currContLoop() {
 	readCurrent();
+#ifndef CURRENT_CONTROL_OPENLOOP
 	float e = CCParams.setVal - CCParams.current;
 	CCParams.lastI += CCParams.ki * e * CCParams.ts;	//perform integration
 	CCParams.lastI = CONSTRAIN(CCParams.lastI, -1, 1);	//clamp integral
 
 	updateFlywheelPWM((CCParams.kp * e + CCParams.lastI));		//update PWM
+#else
+	updateFlywheelPWM(CCParams.setVal);
+
+#endif
 }
 
 
