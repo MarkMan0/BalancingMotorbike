@@ -63,6 +63,7 @@ static inline int16_t map(int16_t x, int16_t in_min, int16_t in_max, int16_t out
 static inline void handleCommand(uint8_t *cmd) {
 
 	switch(cmd[0]) {
+	case 'P':
 	case 'p': {
 		//turn left
 		int16_t pos = getIntFromCmd(cmd);
@@ -72,6 +73,8 @@ static inline void handleCommand(uint8_t *cmd) {
 		updateServoPW();
 		break;
 	}
+
+	case 'S':
 	case 's': {
 		//move forward/backward with desired speed
 		int16_t spd = getIntFromCmd(cmd);
@@ -88,6 +91,7 @@ static inline void handleCommand(uint8_t *cmd) {
 		break;
 	}
 
+	case 'M':
 	case 'm': {
 		//current controller Kp
 		float val = getFloatFromCmd(cmd);
@@ -97,6 +101,7 @@ static inline void handleCommand(uint8_t *cmd) {
 		break;
 	}
 
+	case 'N':
 	case 'n': {
 		//current controller Ki param
 		float val = getFloatFromCmd(cmd);
@@ -106,6 +111,7 @@ static inline void handleCommand(uint8_t *cmd) {
 		break;
 	}
 
+	case 'B':
 	case 'b': {
 		//setpoint for current controller
 		float val = getFloatFromCmd(cmd);
@@ -115,12 +121,14 @@ static inline void handleCommand(uint8_t *cmd) {
 		break;
 	}
 
+	case 'V':
 	case 'v': {
 		//pause current control loop
 		LL_TIM_DisableCounter(TIM_CC_LOOP);
 		break;
 	}
 
+	case 'C':
 	case 'c': {
 		//restart current control loop
 		LL_TIM_SetCounter(TIM_CC_LOOP, 0);
@@ -128,6 +136,7 @@ static inline void handleCommand(uint8_t *cmd) {
 		break;
 	}
 
+	case 'X':
 	case 'x': {
 		//reset integrator of current control loop
 		CCParams.lastI = 0.0;
