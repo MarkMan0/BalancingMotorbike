@@ -42,12 +42,12 @@ static inline void updateFlywheelPWM(float pw) {	//pw is between -1 and 1
 
 	if(pw >= 0) {
 		//TIM1->CH1 ON, TIM1->CH4 OFF
-		LL_TIM_OC_SetCompareCH4(TIM1, 0);
-		LL_TIM_OC_SetCompareCH1(TIM1, (uint32_t) pw);
+		LL_TIM_OC_SetCompareCH4(TIM_FLYWHELL_PWM, 0);
+		LL_TIM_OC_SetCompareCH1(TIM_FLYWHELL_PWM, (uint32_t) pw);
 	}
 	else {
-		LL_TIM_OC_SetCompareCH1(TIM1, 0);
-		LL_TIM_OC_SetCompareCH4(TIM1, (uint32_t) (-1*pw));
+		LL_TIM_OC_SetCompareCH1(TIM_FLYWHELL_PWM, 0);
+		LL_TIM_OC_SetCompareCH4(TIM_FLYWHELL_PWM, (uint32_t) (-1*pw));
 	}
 }
 

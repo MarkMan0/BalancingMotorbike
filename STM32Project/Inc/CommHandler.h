@@ -11,19 +11,19 @@
 #define UART_RX_BUFLEN 	20
 
 static inline void updateServoPW() {
-	LL_TIM_OC_SetCompareCH1(TIM16, MC.servoPW);
+	LL_TIM_OC_SetCompareCH1(TIM_SERVO, MC.servoPW);
 }
 
 static inline void updateMotorPWM() {
 	if(MC.dir == DIR_FORWARD) {
 		//set CH1 to output PWM signal and CH2 to output 0
-		LL_TIM_OC_SetCompareCH2(TIM3, 0);
-		LL_TIM_OC_SetCompareCH1(TIM3, MC.motorPW);
+		LL_TIM_OC_SetCompareCH2(TIM_REAR_PWM, 0);
+		LL_TIM_OC_SetCompareCH1(TIM_REAR_PWM, MC.motorPW);
 	}
 	else {
 		//set CH1 to zero and CH2 to PWM
-		LL_TIM_OC_SetCompareCH1(TIM3, 0);
-		LL_TIM_OC_SetCompareCH2(TIM3, MC.motorPW);
+		LL_TIM_OC_SetCompareCH1(TIM_REAR_PWM, 0);
+		LL_TIM_OC_SetCompareCH2(TIM_REAR_PWM, MC.motorPW);
 	}
 }
 
@@ -117,14 +117,14 @@ static inline void handleCommand(uint8_t *cmd) {
 
 	case 'v': {
 		//pause current control loop
-		LL_TIM_DisableCounter(TIM6);
+		LL_TIM_DisableCounter(TIM_CC_LOOP);
 		break;
 	}
 
 	case 'c': {
 		//restart current control loop
-		LL_TIM_SetCounter(TIM6, 0);
-		LL_TIM_EnableCounter(TIM6);
+		LL_TIM_SetCounter(TIM_CC_LOOP, 0);
+		LL_TIM_EnableCounter(TIM_CC_LOOP);
 		break;
 	}
 

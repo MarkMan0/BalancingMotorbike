@@ -64,7 +64,7 @@ void SystemClock_Config(void);
 
 void initADC();
 void initDMA(uint32_t toAddr, uint32_t sz);
-void initTIM1();
+void initTIM_FLYWHEEL();
 
 /* USER CODE END PFP */
 
@@ -129,13 +129,13 @@ int main(void)
   initADC();
   initServo();
   initRearMotor();
-  initTIM1();
+  initTIM_FLYWHEEL();
 
-  LL_TIM_EnableIT_UPDATE(TIM6);
-  LL_TIM_EnableCounter(TIM6);
+  LL_TIM_EnableIT_UPDATE(TIM_CC_LOOP);
+  LL_TIM_EnableCounter(TIM_CC_LOOP);
 
-  LL_TIM_EnableIT_UPDATE(TIM7);
-  LL_TIM_EnableCounter(TIM7);
+  LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
+  LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
 
 
   /* USER CODE END 2 */
@@ -228,7 +228,7 @@ void initADC() {
 	while(!LL_ADC_IsActiveFlag_ADRDY(ADC1)) {}	//wait for ADC ready
 
 	LL_ADC_REG_StartConversion(ADC1);	//enable conversions
-	LL_TIM_EnableCounter(TIM6);			//start timer
+
 }
 
 void initDMA(uint32_t addr, uint32_t sz) {
@@ -249,13 +249,13 @@ void initDMA(uint32_t addr, uint32_t sz) {
 	  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
 }
 
-void initTIM1() {
-	  LL_TIM_ClearFlag_UPDATE(TIM1);	//set by init function
-	  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);	//enable PWM channels
-	  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH4);
-	  LL_TIM_EnableAllOutputs(TIM1);		//enable outputs
-	  LL_TIM_GenerateEvent_UPDATE(TIM1);	//generate an update event to sych adc to first address in dma
-	  LL_TIM_EnableCounter(TIM1);
+void initTIM_FLYWHEEL() {
+	  LL_TIM_ClearFlag_UPDATE(TIM_FLYWHELL_PWM);	//set by init function
+	  LL_TIM_CC_EnableChannel(TIM_FLYWHELL_PWM, LL_TIM_CHANNEL_CH1);	//enable PWM channels
+	  LL_TIM_CC_EnableChannel(TIM_FLYWHELL_PWM, LL_TIM_CHANNEL_CH4);
+	  LL_TIM_EnableAllOutputs(TIM_FLYWHELL_PWM);		//enable outputs
+	  LL_TIM_GenerateEvent_UPDATE(TIM_FLYWHELL_PWM);	//generate an update event to sych adc to first address in dma
+	  LL_TIM_EnableCounter(TIM_FLYWHELL_PWM);
 }
 
 /* USER CODE END 4 */

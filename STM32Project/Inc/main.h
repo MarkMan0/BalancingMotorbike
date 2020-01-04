@@ -91,6 +91,17 @@ void Error_Handler(void);
 #endif
 /* USER CODE BEGIN Private defines */
 #define CONSTRAIN(VAR, MIN, MAX) ( (VAR) < (MIN) ? (MIN) : ( (VAR) > (MAX) ? (MAX) : (VAR)))
+
+
+//Aliases
+
+#define TIM_CC_LOOP			(TIM6)
+#define TIM_SERVO			(TIM16)
+#define TIM_REAR_PWM		(TIM3)
+#define TIM_FLYWHELL_PWM	(TIM1)
+#define TIM_BALANCE_LOOP	(TIM7)
+
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
