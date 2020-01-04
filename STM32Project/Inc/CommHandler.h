@@ -62,15 +62,17 @@ static inline int16_t map(int16_t x, int16_t in_min, int16_t in_max, int16_t out
 
 static inline void handleCommand(uint8_t *cmd) {
 
-	if(cmd[0] == 'p') {
+	switch(cmd[0]) {
+	case 'p': {
 		//turn left
 		int16_t pos = getIntFromCmd(cmd);
 		MC.servoPW = map(pos, -50, 50, SERVO_PW_MIN, SERVO_PW_MAX);
 		//MC.servoPW = CONSTRAIN(MC.servoPW, SERVO_PW_MIN, SERVO_PW_MAX);
 
 		updateServoPW();
+		break;
 	}
-	else if(cmd[0] == 's') {
+	case 's': {
 		//move forward/backward with desired speed
 		int16_t spd = getIntFromCmd(cmd);
 		if(spd >= 0) {
@@ -83,28 +85,39 @@ static inline void handleCommand(uint8_t *cmd) {
 		MC.motorPW = CONSTRAIN(MC.motorPW, MOTOR_PW_MIN, MOTOR_PW_MAX);
 
 		updateMotorPWM();
+		break;
 	}
-	else if(cmd[0] == 'm') {
+
+	case 'm': {
 		//current controller Kp
 		float val = getFloatFromCmd(cmd);
 		if(!isnanf(val) && !isinff(val)) {
 			CCParams.kp = val;
 		}
+		break;
 	}
-	else if(cmd[0] == 'n') {
+
+	case 'n': {
 		//current controller Ki param
 		float val = getFloatFromCmd(cmd);
 		if(!isnanf(val) && !isinff(val)) {
 			CCParams.ki = val;
 		}
+		break;
 	}
-	else if(cmd[0] == 'b') {
+
+	case 'b': {
 		//setpoint for current controller
 		float val = getFloatFromCmd(cmd);
 		if(!isnanf(val) && !isinff(val)) {
 			CCParams.setVal = val;
 		}
+		break;
 	}
+
+	}
+
+
 }
 
 
