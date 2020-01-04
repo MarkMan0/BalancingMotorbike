@@ -95,6 +95,13 @@ void MC_handleCommand(MovementControl *MC, uint8_t* cmd) {
 			CCParams.ki = val;
 		}
 	}
+	else if(cmd[0] == 'b') {
+		//setpoint for current controller
+		float val = getFloatFromCmd(cmd);
+		if(!isnanf(val) && !isinff(val)) {
+			CCParams.setVal = val;
+		}
+	}
 }
 
 

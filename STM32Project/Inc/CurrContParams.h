@@ -2,6 +2,7 @@
 #define _CURR_CONT_PARAMS_H		1
 
 //if disable, open loop control is used, the setval changes the motor pwm
+
 //#define CURRENT_CONTROL_CLOSEDLOOP
 #ifdef CURRENT_CONTROL_CLOSEDLOOP
 	//A correction factor is also applied to the pulse width, from the current speed

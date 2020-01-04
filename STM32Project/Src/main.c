@@ -127,10 +127,10 @@ int main(void)
 
   //register USART callbacks and enable interrupts
   USART2_register_RXNE_callback(usart_rx);
-  //LL_USART_EnableIT_RXNE(USART2);
+  LL_USART_EnableIT_RXNE(USART2);
 
   USART1_register_RXNE_callback(usart_rx);
-  //LL_USART_EnableIT_RXNE(USART1);
+  LL_USART_EnableIT_RXNE(USART1);
 
 
 
