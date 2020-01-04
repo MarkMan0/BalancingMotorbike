@@ -13,12 +13,17 @@
 typedef struct _CurrContParams {
 	float kp, ki, lastI;
 	float ts;
-	float setVal;
+	float current;
 	uint16_t adcBuff[2];
 
 } CurrContParams;
 
 extern volatile CurrContParams CCParams;	//global instance
+
+
+static inline void readCurrent() {
+	CCParams.current = CURRENT_SENSOR_K*(CCParams.adcBuff[0]*13513.5 - CURRENT_SENSOR_OFFSET); // 4095*3.3 = 13513.5  <-- adc scale factor @12 bit resolution
+}
 
 
 static inline void updateFlywheelPWM(float pw) {	//pw is between -1 and 1
@@ -37,7 +42,8 @@ static inline void updateFlywheelPWM(float pw) {	//pw is between -1 and 1
 }
 
 static inline void currContLoop() {
-	float e = CCParams.setVal - CURRENT_SENSOR_K*(CCParams.adcBuff[0]*13513.5 - CURRENT_SENSOR_OFFSET);	// 4095*3.3 = 13513.5  <-- adc scale factor @12 bit resolution
+	readCurrent();
+	float e = CCParams.setVal - CCParams.current;
 	CCParams.lastI += CCParams.ki * e * CCParams.ts;	//perform integration
 	CCParams.lastI = CONSTRAIN(CCParams.lastI, -1, 1);	//clamp integral
 
