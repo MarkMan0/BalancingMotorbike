@@ -1,7 +1,13 @@
 #ifndef _CURR_CONT_PARAMS_H
 #define _CURR_CONT_PARAMS_H		1
 
-#define CURRENT_CONTROL_OPENLOOP
+//if disable, open loop control is used, the setval changes the motor pwm
+//#define CURRENT_CONTROL_CLOSEDLOOP
+#ifdef CURRENT_CONTROL_CLOSEDLOOP
+	//A correction factor is also applied to the pulse width, from the current speed
+	//K is roughly the motor constant  K = voltage[V]/speed[rad/s]
+	//#define CURRENT_CONTROL_CORRECTION_FACTOR	(5.5)
+#endif
 
 #include "stdint.h"
 #include "main.h"
@@ -46,12 +52,16 @@ static inline void updateFlywheelPWM(float pw) {	//pw is between -1 and 1
 
 static inline void currContLoop() {
 	readCurrent();
-#ifndef CURRENT_CONTROL_OPENLOOP
+
+#if defined(CURRENT_CONTROL_CLOSEDLOOP)
 	float e = CCParams.setVal - CCParams.current;
 	CCParams.lastI += CCParams.ki * e * CCParams.ts;	//perform integration
 	CCParams.lastI = CONSTRAIN(CCParams.lastI, -1, 1);	//clamp integral
-
-	updateFlywheelPWM((CCParams.kp * e + CCParams.lastI));		//update PWM
+	#if defined(CURRENT_CONTROL_CORRECTION_FACTOR)
+		updateFlywheelPWM((CCParams.kp * e + CCParams.lastI)*CURRENT_CONTROL_CORRECTION_FACTOR);		//update PWM
+	#else
+		updateFlywheelPWM(CCParams.kp * e + CCParams.lastI);
+	#endif
 #else
 	updateFlywheelPWM(CCParams.setVal);
 
