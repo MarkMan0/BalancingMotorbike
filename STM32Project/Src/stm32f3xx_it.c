@@ -27,6 +27,7 @@
 #include "orientation.h"
 #include "CommHandler.h"
 #include "BalanceContParams.h"
+#include "FWSpdTracker.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -215,6 +216,23 @@ void SysTick_Handler(void)
 /* For the available peripheral interrupt handler names,                      */
 /* please refer to the startup file (startup_stm32f3xx.s).                    */
 /******************************************************************************/
+
+/**
+  * @brief This function handles TIM1 update and TIM16 interrupts.
+  */
+void TIM1_UP_TIM16_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_UP_TIM16_IRQn 0 */
+	if(LL_TIM_IsActiveFlag_UPDATE(TIM16)) {
+		calcFWSpd();
+		LL_TIM_ClearFlag_UPDATE(TIM16);
+	}
+  /* USER CODE END TIM1_UP_TIM16_IRQn 0 */
+  
+  /* USER CODE BEGIN TIM1_UP_TIM16_IRQn 1 */
+
+  /* USER CODE END TIM1_UP_TIM16_IRQn 1 */
+}
 
 /**
   * @brief This function handles TIM2 global interrupt.

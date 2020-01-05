@@ -35,6 +35,7 @@
 #include "orientation.h"
 #include "MovementController.h"
 #include "CurrContParams.h"
+#include "FWSpdTracker.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -70,7 +71,7 @@ void initTIM_FLYWHEEL();
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint32_t cnt;
+
 /* USER CODE END 0 */
 
 /**
@@ -138,12 +139,8 @@ int main(void)
   LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
   LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
 
-  LL_TIM_SetCounter(TIM2, 100);
-  //LL_TIM_GenerateEvent_UPDATE(TIM2);
-  LL_TIM_ClearFlag_UPDATE(TIM_ENC);
-  LL_TIM_EnableIT_UPDATE(TIM_ENC);
-  LL_TIM_EnableCounter(TIM_ENC);
 
+  initTracker();
 
 
   /* USER CODE END 2 */
@@ -161,8 +158,8 @@ int main(void)
 	  //readForRoll(&mpu);
 	  //calcRoll(&o);
 
-	  cnt = LL_TIM_GetCounter(TIM2);
     /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
