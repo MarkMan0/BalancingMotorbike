@@ -70,7 +70,7 @@ void initTIM_FLYWHEEL();
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+uint32_t cnt;
 /* USER CODE END 0 */
 
 /**
@@ -118,6 +118,7 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM7_Init();
   MX_TIM16_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   initDMA((uint32_t) (CCParams.adcBuff), 2);
@@ -137,6 +138,13 @@ int main(void)
   LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
   LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
 
+  //LL_TIM_SetCounter(TIM2, LL_TIM_GetAutoReload(TIM2) / 2);
+  //LL_TIM_GenerateEvent_UPDATE(TIM2);
+  LL_TIM_ClearFlag_UPDATE(TIM2);
+  LL_TIM_EnableIT_UPDATE(TIM2);
+  LL_TIM_EnableCounter(TIM2);
+
+
 
   /* USER CODE END 2 */
 
@@ -153,8 +161,8 @@ int main(void)
 	  //readForRoll(&mpu);
 	  //calcRoll(&o);
 
+	  cnt = LL_TIM_GetCounter(TIM2);
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
