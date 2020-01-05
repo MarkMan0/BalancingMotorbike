@@ -138,11 +138,11 @@ int main(void)
   LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
   LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
 
-  //LL_TIM_SetCounter(TIM2, LL_TIM_GetAutoReload(TIM2) / 2);
+  LL_TIM_SetCounter(TIM2, 100);
   //LL_TIM_GenerateEvent_UPDATE(TIM2);
-  LL_TIM_ClearFlag_UPDATE(TIM2);
-  LL_TIM_EnableIT_UPDATE(TIM2);
-  LL_TIM_EnableCounter(TIM2);
+  LL_TIM_ClearFlag_UPDATE(TIM_ENC);
+  LL_TIM_EnableIT_UPDATE(TIM_ENC);
+  LL_TIM_EnableCounter(TIM_ENC);
 
 
 

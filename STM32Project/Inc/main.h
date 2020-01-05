@@ -104,6 +104,7 @@ static inline int16_t map(int16_t x, int16_t in_min, int16_t in_max, int16_t out
 #define TIM_REAR_PWM		(TIM3)
 #define TIM_FLYWHELL_PWM	(TIM1)
 #define TIM_BALANCE_LOOP	(TIM7)
+#define TIM_ENC				(TIM2)
 
 
 /* USER CODE END Private defines */
