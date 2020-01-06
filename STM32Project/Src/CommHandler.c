@@ -29,7 +29,7 @@ static inline int16_t getIntFromCmd(uint8_t* cmd) {
 		++i;
 	}
 
-	return atoi(cmd);
+	return atoi((const char *)cmd);
 }
 
 static inline float getFloatFromCmd(uint8_t* cmd ){
@@ -43,7 +43,7 @@ static inline float getFloatFromCmd(uint8_t* cmd ){
 		++i;
 	}
 
-	return atoff(cmd);
+	return atoff((const char *)cmd);
 }
 
 
