@@ -71,7 +71,7 @@ static inline void currContLoop() {
 
 
 void initADC();
-void init_ADC_DMA(uint32_t toAddr, uint32_t sz);
+void initDMA_ADC(uint32_t toAddr, uint32_t sz);
 void initTIM_FLYWHEEL();
 void initTIM_CurrCont();
 

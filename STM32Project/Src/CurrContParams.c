@@ -25,7 +25,7 @@ void initADC() {
 
 }
 
-void init_ADC_DMA(uint32_t addr, uint32_t sz) {
+void initDMA_ADC(uint32_t addr, uint32_t sz) {
 
 	  LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_DMA1);
 

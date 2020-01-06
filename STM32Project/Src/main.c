@@ -63,10 +63,6 @@
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
-void initADC();
-void initDMA(uint32_t toAddr, uint32_t sz);
-void initTIM_FLYWHEEL();
-
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -131,7 +127,7 @@ int main(void)
   initServo();
   initRearMotor();
 
-  init_ADC_DMA((uint32_t) (CCParams.adcBuff), 2);
+  initDMA_ADC((uint32_t) (CCParams.adcBuff), 2);
   initADC();
   initTIM_FLYWHEEL();
 
