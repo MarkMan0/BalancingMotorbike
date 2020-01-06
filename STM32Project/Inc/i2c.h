@@ -182,6 +182,8 @@ static inline void i2c_read_int16(uint8_t slave_addr, uint8_t register_addr, uin
 	I2C1->ICR |= (1 << 4);	//clear NACK flag
 }
 
+/* USER CODE END Prototypes */
+
 #ifdef __cplusplus
 }
 #endif
