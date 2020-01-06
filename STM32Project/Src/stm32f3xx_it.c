@@ -23,10 +23,11 @@
 #include "stm32f3xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "callbacks.h"
 #include "CurrContParams.h"
 #include "orientation.h"
+#include "CommHandler.h"
 #include "BalanceContParams.h"
+#include "FWSpdTracker.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -217,14 +218,45 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles TIM1 update and TIM16 interrupts.
+  */
+void TIM1_UP_TIM16_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM1_UP_TIM16_IRQn 0 */
+	if(LL_TIM_IsActiveFlag_UPDATE(TIM16)) {
+		calcFWSpd();
+		LL_TIM_ClearFlag_UPDATE(TIM16);
+	}
+  /* USER CODE END TIM1_UP_TIM16_IRQn 0 */
+  
+  /* USER CODE BEGIN TIM1_UP_TIM16_IRQn 1 */
+
+  /* USER CODE END TIM1_UP_TIM16_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM2 global interrupt.
+  */
+void TIM2_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM2_IRQn 0 */
+	if(LL_TIM_IsActiveFlag_UPDATE(TIM2)) {
+		LL_TIM_ClearFlag_UPDATE(TIM2);
+	}
+  /* USER CODE END TIM2_IRQn 0 */
+  /* USER CODE BEGIN TIM2_IRQn 1 */
+
+  /* USER CODE END TIM2_IRQn 1 */
+}
+
+/**
   * @brief This function handles USART1 global interrupt / USART1 wake-up interrupt through EXT line 25.
   */
 void USART1_IRQHandler(void)
 {
   /* USER CODE BEGIN USART1_IRQn 0 */
 	if(LL_USART_IsActiveFlag_RXNE(USART1)) {
-		usart1_rxne_callback(LL_USART_ReceiveData8(USART1));
-
+		receiveCharCallback(LL_USART_ReceiveData8(USART1));
 	}
 
   /* USER CODE END USART1_IRQn 0 */
@@ -241,7 +273,7 @@ void USART2_IRQHandler(void)
   /* USER CODE BEGIN USART2_IRQn 0 */
 
 	if(LL_USART_IsActiveFlag_RXNE(USART2)) {
-		usart2_rxne_callback(LL_USART_ReceiveData8(USART2));
+		receiveCharCallback(LL_USART_ReceiveData8(USART2));
 	}
 
 

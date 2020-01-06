@@ -31,11 +31,11 @@
 #include <string.h>
 #include <stdio.h>
 #include "stm32f3xx_ll_usart.h"
-#include "callbacks.h"
 #include "MPU6050.h"
 #include "orientation.h"
 #include "MovementController.h"
 #include "CurrContParams.h"
+#include "FWSpdTracker.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +45,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define USART_RX_BUFLEN 	(10)
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -63,10 +63,9 @@
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
-void usart_rx(uint8_t);
 void initADC();
 void initDMA(uint32_t toAddr, uint32_t sz);
-void initTIM1();
+void initTIM_FLYWHEEL();
 
 /* USER CODE END PFP */
 
@@ -120,30 +119,28 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM7_Init();
   MX_TIM16_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
   initDMA((uint32_t) (CCParams.adcBuff), 2);
 
 
-  //register USART callbacks and enable interrupts
-  USART2_register_RXNE_callback(usart_rx);
   LL_USART_EnableIT_RXNE(USART2);
-
-  USART1_register_RXNE_callback(usart_rx);
   LL_USART_EnableIT_RXNE(USART1);
-
-
 
   initADC();
   initServo();
   initRearMotor();
-  initTIM1();
+  initTIM_FLYWHEEL();
 
-  LL_TIM_EnableIT_UPDATE(TIM6);
-  LL_TIM_EnableCounter(TIM6);
+  LL_TIM_EnableIT_UPDATE(TIM_CC_LOOP);
+  LL_TIM_EnableCounter(TIM_CC_LOOP);
 
-  LL_TIM_EnableIT_UPDATE(TIM7);
-  LL_TIM_EnableCounter(TIM7);
+  LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
+  LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
+
+
+  initTracker();
 
 
   /* USER CODE END 2 */
@@ -217,21 +214,6 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 
-void usart_rx(uint8_t x) {
-	static uint8_t buffer[USART_RX_BUFLEN];
-	static uint8_t ind = 0;
-	if(ind < USART_RX_BUFLEN) {
-		buffer[ind++] = x;
-	} else {
-		ind = 0;
-	}
-	if(x == '\n' || x == '\r'  || x == '\0') {
-		//end of command
-		MC_handleCommand((MovementControl*) &MC, buffer);
-		ind = 0;
-	}
-	return;
-}
 
 void initADC() {
 
@@ -251,7 +233,7 @@ void initADC() {
 	while(!LL_ADC_IsActiveFlag_ADRDY(ADC1)) {}	//wait for ADC ready
 
 	LL_ADC_REG_StartConversion(ADC1);	//enable conversions
-	LL_TIM_EnableCounter(TIM6);			//start timer
+
 }
 
 void initDMA(uint32_t addr, uint32_t sz) {
@@ -272,13 +254,13 @@ void initDMA(uint32_t addr, uint32_t sz) {
 	  LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_1);
 }
 
-void initTIM1() {
-	  LL_TIM_ClearFlag_UPDATE(TIM1);	//set by init function
-	  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);	//enable PWM channels
-	  LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH4);
-	  LL_TIM_EnableAllOutputs(TIM1);		//enable outputs
-	  LL_TIM_GenerateEvent_UPDATE(TIM1);	//generate an update event to sych adc to first address in dma
-	  LL_TIM_EnableCounter(TIM1);
+void initTIM_FLYWHEEL() {
+	  LL_TIM_ClearFlag_UPDATE(TIM_FLYWHELL_PWM);	//set by init function
+	  LL_TIM_CC_EnableChannel(TIM_FLYWHELL_PWM, LL_TIM_CHANNEL_CH1);	//enable PWM channels
+	  LL_TIM_CC_EnableChannel(TIM_FLYWHELL_PWM, LL_TIM_CHANNEL_CH4);
+	  LL_TIM_EnableAllOutputs(TIM_FLYWHELL_PWM);		//enable outputs
+	  LL_TIM_GenerateEvent_UPDATE(TIM_FLYWHELL_PWM);	//generate an update event to sych adc to first address in dma
+	  LL_TIM_EnableCounter(TIM_FLYWHELL_PWM);
 }
 
 /* USER CODE END 4 */

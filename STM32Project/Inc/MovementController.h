@@ -24,8 +24,6 @@ typedef struct _MovementControl {
 
 } MovementControl;
 
-void MC_handleCommand(MovementControl *MC, uint8_t* cmd);
-
 void initServo();
 void initRearMotor();
 

@@ -74,6 +74,10 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
 
+static inline int16_t map(int16_t x, int16_t in_min, int16_t in_max, int16_t out_min, int16_t out_max) {
+	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
@@ -91,6 +95,18 @@ void Error_Handler(void);
 #endif
 /* USER CODE BEGIN Private defines */
 #define CONSTRAIN(VAR, MIN, MAX) ( (VAR) < (MIN) ? (MIN) : ( (VAR) > (MAX) ? (MAX) : (VAR)))
+
+
+//Aliases
+
+#define TIM_CC_LOOP			(TIM6)
+#define TIM_SERVO			(TIM16)
+#define TIM_REAR_PWM		(TIM3)
+#define TIM_FLYWHELL_PWM	(TIM1)
+#define TIM_BALANCE_LOOP	(TIM7)
+#define TIM_ENC				(TIM2)
+
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
