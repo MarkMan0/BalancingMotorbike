@@ -1,7 +1,6 @@
 #ifndef _MPU6050_H
 #define _MPU6050_H 1
 
-#include "lpf1.h"
 #include <stdint.h>
 
 

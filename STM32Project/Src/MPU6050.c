@@ -2,7 +2,6 @@
 #include "i2c.h"
 #include <stdlib.h>
 #include <string.h>
-#include "lpf1.h"
 
 #include "MPU6050_Registers.h"
 
