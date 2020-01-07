@@ -1,7 +1,7 @@
+#include <CurrentController.h>
 #include "MovementController.h"
 #include "main.h"
 #include "stdlib.h"
-#include "CurrContParams.h"
 #include "math.h"
 
 

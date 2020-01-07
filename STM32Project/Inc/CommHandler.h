@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include "MovementController.h"
-#include "CurrContParams.h"
+#include "CurrentController.h"
 #include "main.h"
 #include <math.h>
 #include <stdlib.h>

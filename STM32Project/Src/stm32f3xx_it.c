@@ -19,14 +19,14 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
+#include <BalanceController.h>
+#include <CurrentController.h>
 #include "main.h"
 #include "stm32f3xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "CurrContParams.h"
 #include "orientation.h"
 #include "CommHandler.h"
-#include "BalanceContParams.h"
 #include "FWSpdTracker.h"
 /* USER CODE END Includes */
 

@@ -1,4 +1,4 @@
-#include "CurrContParams.h"
+#include <CurrentController.h>
 
 
 volatile CurrContParams CCParams = { 0 }; //global instance definition

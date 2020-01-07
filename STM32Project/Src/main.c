@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
+#include <CurrentController.h>
 #include "main.h"
 #include "adc.h"
 #include "i2c.h"
@@ -34,7 +35,6 @@
 #include "MPU6050.h"
 #include "orientation.h"
 #include "MovementController.h"
-#include "CurrContParams.h"
 #include "FWSpdTracker.h"
 /* USER CODE END Includes */
 
