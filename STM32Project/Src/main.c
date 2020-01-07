@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <CurrentController.h>
+#include <EncoderHandler.h>
 #include "main.h"
 #include "adc.h"
 #include "i2c.h"
@@ -35,7 +36,6 @@
 #include "MPU6050.h"
 #include "orientation.h"
 #include "MovementController.h"
-#include "FWSpdTracker.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -137,7 +137,7 @@ int main(void)
   LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
 
 
-  initTracker();
+  initEncoder();
 
 
   /* USER CODE END 2 */

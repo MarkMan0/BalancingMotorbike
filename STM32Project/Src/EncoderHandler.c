@@ -1,10 +1,10 @@
-#include "FWSpdTracker.h"
+#include <EncoderHandler.h>
 
 
 volatile SpdTracker FWspeed = {0};
 
 
-void initTracker() {
+void initEncoder() {
 
 	FWspeed.lastCnt = LL_TIM_GetAutoReload(TIM_ENC) / 2;	//start counting from the middle of possible values
 

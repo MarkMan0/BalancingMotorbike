@@ -17,9 +17,9 @@ typedef struct _SpdTracker {
 extern volatile SpdTracker FWspeed;
 
 
-void initTracker();
+void initEncoder();
 
-static inline void calcFWSpd() {
+static inline void calcEncoderSpd() {
 	uint32_t curr = LL_TIM_GetCounter(TIM_ENC);
 	int32_t diff = 0;
 	if(FWspeed.overflowFlag) {

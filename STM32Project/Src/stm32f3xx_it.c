@@ -21,13 +21,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include <BalanceController.h>
 #include <CurrentController.h>
+#include <EncoderHandler.h>
 #include "main.h"
 #include "stm32f3xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "orientation.h"
 #include "CommHandler.h"
-#include "FWSpdTracker.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -224,7 +224,7 @@ void TIM1_UP_TIM16_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM1_UP_TIM16_IRQn 0 */
 	if(LL_TIM_IsActiveFlag_UPDATE(TIM16)) {
-		calcFWSpd();
+		calcEncoderSpd();
 		LL_TIM_ClearFlag_UPDATE(TIM16);
 	}
   /* USER CODE END TIM1_UP_TIM16_IRQn 0 */
