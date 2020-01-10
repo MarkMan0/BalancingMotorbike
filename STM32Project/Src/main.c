@@ -157,8 +157,7 @@ int main(void)
   while (1)
   {
 
-	  //readForRoll(&mpu);
-	  //calcRoll(&o);
+	  MPU6050readForRoll(&mpu);
 
     /* USER CODE END WHILE */
 
