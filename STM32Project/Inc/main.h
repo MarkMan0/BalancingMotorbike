@@ -81,6 +81,8 @@ static inline int16_t map(int16_t x, int16_t in_min, int16_t in_max, int16_t out
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define LED_PIN_Pin LL_GPIO_PIN_3
+#define LED_PIN_GPIO_Port GPIOB
 #ifndef NVIC_PRIORITYGROUP_0
 #define NVIC_PRIORITYGROUP_0         ((uint32_t)0x00000007) /*!< 0 bit  for pre-emption priority,
                                                                  4 bits for subpriority */

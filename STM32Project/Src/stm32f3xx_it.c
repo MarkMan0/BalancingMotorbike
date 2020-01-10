@@ -19,13 +19,13 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include <BalanceController.h>
-#include <CurrentController.h>
-#include <EncoderHandler.h>
 #include "main.h"
 #include "stm32f3xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "BalanceController.h"
+#include "CurrentController.h"
+#include "EncoderHandler.h"
 #include "orientation.h"
 #include "CommHandler.h"
 /* USER CODE END Includes */

@@ -19,8 +19,6 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include <CurrentController.h>
-#include <EncoderHandler.h>
 #include "main.h"
 #include "adc.h"
 #include "i2c.h"
@@ -36,6 +34,8 @@
 #include "MPU6050.h"
 #include "orientation.h"
 #include "MovementController.h"
+#include "CurrentController.h"
+#include "EncoderHandler.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -118,6 +118,7 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
+  LL_GPIO_SetOutputPin(LED_PIN_GPIO_Port, LED_PIN_Pin);
 
   //calc IMU roll offset/error
   MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
