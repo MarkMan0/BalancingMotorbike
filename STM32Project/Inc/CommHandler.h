@@ -11,11 +11,10 @@
 #define UART_RX_BUFLEN 	20
 
 
-
-
-
 void handleCommand(uint8_t *cmd);
 
 void receiveCharCallback(uint8_t c);
+
+void waitUser();
 
 #endif

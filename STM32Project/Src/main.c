@@ -36,6 +36,7 @@
 #include "MovementController.h"
 #include "CurrentController.h"
 #include "EncoderHandler.h"
+#include "CommHandler.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -118,19 +119,21 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
-  LL_GPIO_SetOutputPin(LED_PIN_GPIO_Port, LED_PIN_Pin);
+  LL_USART_EnableIT_RXNE(USART2);
+  LL_USART_EnableIT_RXNE(USART1);
 
-  //calc IMU roll offset/error
   MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
   MPU6050init(&mpu);	//init sensor
+
+
+  waitUser();	//wait for signal on serial
+  //calc IMU roll offset/error
   MPU6050CalcErr(&mpu);	//calculate error
+
+  waitUser();
 
   orientation.mpu = &mpu;
 
-
-
-  LL_USART_EnableIT_RXNE(USART2);
-  LL_USART_EnableIT_RXNE(USART1);
 
   initServo();
   initRearMotor();
@@ -140,12 +143,13 @@ int main(void)
   initTIM_FLYWHEEL();
 
   initTIM_CurrCont();
+  initEncoder();
+
 
   LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
   LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
 
 
-  initEncoder();
 
 
   /* USER CODE END 2 */

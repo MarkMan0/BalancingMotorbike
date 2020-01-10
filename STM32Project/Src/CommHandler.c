@@ -47,9 +47,13 @@ static inline float getFloatFromCmd(uint8_t* cmd ){
 }
 
 
+static volatile uint8_t startFlag;
 void receiveCharCallback(uint8_t c) {
 	static uint8_t buffer[UART_RX_BUFLEN];
 	static uint8_t ind = 0;
+	if(c == 'a') {
+		startFlag = 1;	//indicate start
+	}
 	if(ind < UART_RX_BUFLEN) {
 		buffer[ind++] = c;
 	} else {
@@ -63,6 +67,17 @@ void receiveCharCallback(uint8_t c) {
 	return;
 }
 
+void waitUser() {
+	startFlag = 0;
+	while(!startFlag) {
+	  //blink led
+	  LL_GPIO_TogglePin(LED_PIN_GPIO_Port, LED_PIN_Pin);
+	  LL_mDelay(100);
+	}
+
+	LL_GPIO_ResetOutputPin(LED_PIN_GPIO_Port, LED_PIN_Pin);
+
+}
 
 void handleCommand(uint8_t *cmd) {
 
