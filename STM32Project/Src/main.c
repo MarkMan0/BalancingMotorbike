@@ -119,6 +119,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
+  //calc IMU roll offset/error
+  MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
+  MPU6050init(&mpu);	//init sensor
+  MPU6050CalcErr(&mpu);	//calculate error
+
+  orientation.mpu = &mpu;
+
 
 
   LL_USART_EnableIT_RXNE(USART2);
@@ -145,9 +152,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
-  //MPU6050init(&mpu);
-  orientation.mpu = &mpu;
+
 
   while (1)
   {

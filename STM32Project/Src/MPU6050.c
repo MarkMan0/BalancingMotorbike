@@ -8,14 +8,21 @@
 //reads all 6 data via I2C
 void readData(MPU6050* mpu) {
 	i2c_read3_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_XOUT_H,(uint8_t*) mpu->accBuff);
-
 	i2c_read3_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, (uint8_t*) mpu->gBuff);
+
+	//apply offsets
+	for(int8_t i = 0; i < 3; ++i) {
+		mpu->accBuff[i] -= mpu->accCorrection[i];
+		mpu->gBuff[i] -= mpu->gBuff[i];
+	}
 }
 
 //reads the y accelerometer and gyroscope data
 void readForRoll(MPU6050* mpu) {
 	i2c_read_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_YOUT_H, (uint8_t*)(mpu->accBuff+1));
+	mpu->accBuff[1] -= mpu->accCorrection[1];
 	i2c_read_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, (uint8_t*)(mpu->gBuff));
+	mpu->gBuff[0] -= mpu->gCorrection[0];
 }
 
 
@@ -29,3 +36,41 @@ void MPU6050init(MPU6050* mpu) {
 
 	i2c_write(MPU6050_ADDRESS, MPU_6050_REG_PWR_MGMT_1, 0x00);	//reset MPU
 }
+
+
+void MPU6050CalcErr(MPU6050* mpu) {
+	//the robot should be still
+	//the expected value for all gyro readings is 0
+	//do N number of readings, the average will be the offset for each axis
+
+	const int16_t accExpected[] = {0, 0, 0};	//TODO: find values, at least for y
+
+	for(int8_t i = 0; i < 3; ++i) {
+		mpu->gCorrection[i] = 0;
+		mpu->accCorrection[i] = 0;
+	}
+
+	int16_t N = 500;
+	int32_t sum[6];
+	for(int8_t i = 0; i < 6; ++i) {
+		sum[i] = 0;
+	}
+	while(N > 0) {
+		--N;
+		readData(mpu);
+		for(int8_t i =0; i < 3; ++i) {
+			sum[i] += mpu->accBuff[i] - accExpected[i];
+		}
+		for(int8_t i = 3; i < 6; ++i) {
+			sum[i] += mpu->gBuff[i-3];
+		}
+		LL_mDelay(2); //gyro refresh rate is 1Khz. This to make sure that always reading new data
+	}
+
+	for(int i = 0; i < 3; ++i) {
+		mpu->gCorrection[i] = (int16_t) (1.0*sum[i] / N);
+		mpu->accCorrection[i] = (int16_t) (1.0*sum[i+3] / N);
+	}
+
+}
+
