@@ -19,8 +19,8 @@ typedef struct _MPU6050 {
 } MPU6050;
 
 
-void readData(MPU6050* mpu);	//read all 6 axis
-void readForRoll(MPU6050* mpu);	//read Y axis only
+void MPU6050readData(MPU6050* mpu);	//read all 6 axis
+void MPU6050readForRoll(MPU6050* mpu);	//read Y axis only
 void MPU6050init(MPU6050* mpu);	//call on startup
 void MPU6050CalcErr(MPU6050* mpu);	//get gyro error
 

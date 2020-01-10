@@ -6,7 +6,7 @@
 #include "MPU6050_Registers.h"
 
 //reads all 6 data via I2C
-void readData(MPU6050* mpu) {
+void MPU6050readData(MPU6050* mpu) {
 	i2c_read3_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_XOUT_H,(uint8_t*) mpu->accBuff);
 	i2c_read3_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, (uint8_t*) mpu->gBuff);
 
@@ -18,7 +18,7 @@ void readData(MPU6050* mpu) {
 }
 
 //reads the y accelerometer and gyroscope data
-void readForRoll(MPU6050* mpu) {
+void MPU6050readForRoll(MPU6050* mpu) {
 	i2c_read_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_YOUT_H, (uint8_t*)(mpu->accBuff+1));
 	mpu->accBuff[1] -= mpu->accCorrection[1];
 	i2c_read_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, (uint8_t*)(mpu->gBuff));
@@ -57,7 +57,7 @@ void MPU6050CalcErr(MPU6050* mpu) {
 	}
 	while(N > 0) {
 		--N;
-		readData(mpu);
+		MPU6050readData(mpu);
 		for(int8_t i =0; i < 3; ++i) {
 			sum[i] += mpu->accBuff[i] - accExpected[i];
 		}
