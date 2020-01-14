@@ -13,7 +13,7 @@ void MPU6050readData(MPU6050* mpu) {
 	//apply offsets
 	for(int8_t i = 0; i < 3; ++i) {
 		mpu->accBuff[i] -= mpu->accCorrection[i];
-		mpu->gBuff[i] -= mpu->gBuff[i];
+		mpu->gBuff[i] -= mpu->gCorrection[i];
 	}
 }
 
@@ -50,13 +50,12 @@ void MPU6050CalcErr(MPU6050* mpu) {
 		mpu->accCorrection[i] = 0;
 	}
 
-	int16_t N = 500;
+	const int16_t N = 500;
 	int32_t sum[6];
 	for(int8_t i = 0; i < 6; ++i) {
 		sum[i] = 0;
 	}
-	while(N > 0) {
-		--N;
+	for(int16_t i = 0; i < N; ++i) {
 		MPU6050readData(mpu);
 		for(int8_t i =0; i < 3; ++i) {
 			sum[i] += mpu->accBuff[i] - accExpected[i];
@@ -67,9 +66,9 @@ void MPU6050CalcErr(MPU6050* mpu) {
 		LL_mDelay(2); //gyro refresh rate is 1Khz. This to make sure that always reading new data
 	}
 
-	for(int i = 0; i < 3; ++i) {
-		mpu->gCorrection[i] = (int16_t) (1.0*sum[i] / N);
-		mpu->accCorrection[i] = (int16_t) (1.0*sum[i+3] / N);
+	for(int8_t i = 0; i < 3; ++i) {
+		//mpu->accCorrection[i] = (int16_t) (1.0*sum[i] / N);
+		mpu->gCorrection[i] = (int16_t) (1.0*sum[i+3] / N);
 	}
 
 }
