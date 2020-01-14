@@ -13,11 +13,13 @@
 #include "stdint.h"
 #include "main.h"
 
+#define ADC_TO_VOLTS		(3.3/4095)
+
 #define FLYWHEELPWM_MAX		(699)
 #define FLYWHEELPWM_NEG		(-699)
 
-#define CURRENT_SENSOR_OFFSET	(1.15)		// Zero current value
-#define CURRENT_SENSOR_K		(0.185)		//Volt / Amps
+#define CURRENT_SENSOR_OFFSET	(5.0/2.0)		// Zero current value
+#define CURRENT_SENSOR_K		(1.0/0.185)		//Volt / Amps
 
 typedef struct _CurrContParams {
 	float kp, ki, lastI;
@@ -32,7 +34,7 @@ extern volatile CurrContParams CCParams;	//global instance
 
 
 static inline void readCurrent() {
-	CCParams.current = CURRENT_SENSOR_K*(CCParams.adcBuff[0]*13513.5 - CURRENT_SENSOR_OFFSET); // 4095*3.3 = 13513.5  <-- adc scale factor @12 bit resolution
+	CCParams.current = CURRENT_SENSOR_K*(CCParams.adcBuff[0]*ADC_TO_VOLTS - CURRENT_SENSOR_OFFSET); // 4095*3.3 = 13513.5  <-- adc scale factor @12 bit resolution
 }
 
 
