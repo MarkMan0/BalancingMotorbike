@@ -26,6 +26,7 @@ typedef struct _CurrContParams {
 	float ts;
 	float setVal;
 	float current;
+	float offset;
 	uint16_t adcBuff[2];
 
 } CurrContParams;
@@ -34,7 +35,7 @@ extern volatile CurrContParams CCParams;	//global instance
 
 
 static inline void readCurrent() {
-	CCParams.current = CURRENT_SENSOR_K*(CCParams.adcBuff[0]*ADC_TO_VOLTS - CURRENT_SENSOR_OFFSET); // 4095*3.3 = 13513.5  <-- adc scale factor @12 bit resolution
+	CCParams.current = CURRENT_SENSOR_K*(CCParams.adcBuff[0]*ADC_TO_VOLTS) - CCParams.offset;
 }
 
 
@@ -76,6 +77,8 @@ void initADC();
 void initDMA_ADC(uint32_t toAddr, uint32_t sz);
 void initTIM_FLYWHEEL();
 void initTIM_CurrCont();
+void calcCurrentSensorOffset();
+
 
 
 #endif

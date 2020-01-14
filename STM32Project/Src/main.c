@@ -125,10 +125,23 @@ int main(void)
   MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
   MPU6050init(&mpu);	//init sensor
 
+  initDMA_ADC((uint32_t) (CCParams.adcBuff), 2);
+  initADC();
+  initTIM_FLYWHEEL();
+
 
   waitUser();	//wait for signal on serial
+
+  /* *** START CALIBRATION *** */
+
   //calc IMU roll offset/error
   MPU6050CalcErr(&mpu);	//calculate error
+  calcCurrentSensorOffset();
+
+
+
+
+  /* *** CALIBRATION END *** */
 
   waitUser();
 
@@ -138,16 +151,14 @@ int main(void)
   initServo();
   initRearMotor();
 
-  initDMA_ADC((uint32_t) (CCParams.adcBuff), 2);
-  initADC();
-  initTIM_FLYWHEEL();
+
 
   initTIM_CurrCont();
   initEncoder();
 
 
-  LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
-  LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
+  //LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
+  //LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
 
 
 
@@ -162,7 +173,8 @@ int main(void)
   while (1)
   {
 
-	  MPU6050readForRoll(&mpu);
+	  MPU6050readData(&mpu);
+	  //MPU6050readForRoll(&mpu);
 
     /* USER CODE END WHILE */
 

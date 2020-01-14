@@ -57,3 +57,15 @@ void initTIM_CurrCont() {
 	  LL_TIM_EnableIT_UPDATE(TIM_CC_LOOP);
 	  LL_TIM_EnableCounter(TIM_CC_LOOP);
 }
+
+
+void calcCurrentSensorOffset() {
+	const uint16_t N = 500;
+	float sum = 0.0;
+	for(uint16_t i = 0; i < N; ++i) {
+		readCurrent();
+		sum += CCParams.current;
+		LL_mDelay(1);
+	}
+	CCParams.offset = sum / N;
+}
