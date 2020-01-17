@@ -1,5 +1,5 @@
 #include "CommHandler.h"
-
+#include "BalanceController.h"
 
 static inline void updateServoPW() {
 	LL_TIM_OC_SetCompareCH1(TIM_SERVO, MC.servoPW);
@@ -79,6 +79,10 @@ void waitUser() {
 
 }
 
+static uint8_t isValid(float val) {
+	return (!isnanf(val) && !isinff(val));
+}
+
 void handleCommand(uint8_t *cmd) {
 
 	switch(cmd[0]) {
@@ -93,8 +97,8 @@ void handleCommand(uint8_t *cmd) {
 		break;
 	}
 
-	case 'S':
-	case 's': {
+	case 'Q':
+	case 'q': {
 		//move forward/backward with desired speed
 		int16_t spd = getIntFromCmd(cmd);
 		if(spd >= 0) {
@@ -114,7 +118,7 @@ void handleCommand(uint8_t *cmd) {
 	case 'm': {
 		//current controller Kp
 		float val = getFloatFromCmd(cmd);
-		if(!isnanf(val) && !isinff(val)) {
+		if(isValid(val)) {
 			CCParams.kp = val;
 		}
 		break;
@@ -124,7 +128,7 @@ void handleCommand(uint8_t *cmd) {
 	case 'n': {
 		//current controller Ki param
 		float val = getFloatFromCmd(cmd);
-		if(!isnanf(val) && !isinff(val)) {
+		if(isValid(val)) {
 			CCParams.ki = val;
 		}
 		break;
@@ -134,7 +138,7 @@ void handleCommand(uint8_t *cmd) {
 	case 'b': {
 		//setpoint for current controller
 		float val = getFloatFromCmd(cmd);
-		if(!isnanf(val) && !isinff(val)) {
+		if(isValid(val)) {
 			CCParams.setVal = val;
 		}
 		break;
@@ -143,6 +147,7 @@ void handleCommand(uint8_t *cmd) {
 	case 'V':
 	case 'v': {
 		//pause current control loop
+		updateFlywheelPWM(0);
 		LL_TIM_DisableCounter(TIM_CC_LOOP);
 		break;
 	}
@@ -159,6 +164,34 @@ void handleCommand(uint8_t *cmd) {
 	case 'x': {
 		//reset integrator of current control loop
 		CCParams.lastI = 0.0;
+		break;
+	}
+
+	case 'L':
+	case 'l': {
+		//set Kp for balance controller
+		float val = getFloatFromCmd(cmd);
+		if(isValid(val)) {
+			BCParams.kp = val;
+		}
+		break;
+	}
+	case 'K':
+	case 'k': {
+		//set Kp for balance controller
+		float val = getFloatFromCmd(cmd);
+		if(isValid(val)) {
+			BCParams.ki = val;
+		}
+		break;
+	}
+	case 'J':
+	case 'j': {
+		//set Kp for balance controller
+		float val = getFloatFromCmd(cmd);
+		if(isValid(val)) {
+			BCParams.kd = val;
+		}
 		break;
 	}
 
