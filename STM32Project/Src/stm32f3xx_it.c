@@ -64,7 +64,7 @@ static inline void balanceContLoop() {
 	BCParams.lastI += BCParams.ki * BCParams.ts * e;
 
 	float sp = BCParams.kp*e + BCParams.lastI;
-	//CCParams.setVal = CONSTRAIN(sp, BCParams.outMin, BCParams.outMax);
+	CCParams.setVal = CONSTRAIN(sp, BCParams.outMin, BCParams.outMax);
 
 }
 

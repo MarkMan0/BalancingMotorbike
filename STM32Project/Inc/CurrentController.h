@@ -4,14 +4,16 @@
 //if disable, open loop control is used, the setval changes the motor pwm
 
 //#define CURRENT_CONTROL_CLOSEDLOOP
+//A correction factor is also applied to the pulse width, from the current speed
+//K is roughly the motor constant  K = voltage[pulse width]/speed[rad/s]
+#define CURRENT_CONTROL_CORRECTION_FACTOR	(0*0*1.0/1000.0)
 #ifdef CURRENT_CONTROL_CLOSEDLOOP
-	//A correction factor is also applied to the pulse width, from the current speed
-	//K is roughly the motor constant  K = voltage[V]/speed[rad/s]
-	//#define CURRENT_CONTROL_CORRECTION_FACTOR	(5.5)
+
 #endif
 
 #include "stdint.h"
 #include "main.h"
+#include "EncoderHandler.h"
 
 #define ADC_TO_VOLTS		(3.3/4095)
 
@@ -67,7 +69,7 @@ static inline void currContLoop() {
 		updateFlywheelPWM(CCParams.kp * e + CCParams.lastI);
 	#endif
 #else
-	updateFlywheelPWM(CCParams.setVal);
+	updateFlywheelPWM(CCParams.setVal + CURRENT_CONTROL_CORRECTION_FACTOR*FWspeed.currSpd);
 
 #endif
 }

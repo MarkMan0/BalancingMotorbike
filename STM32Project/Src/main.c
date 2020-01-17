@@ -37,6 +37,7 @@
 #include "CurrentController.h"
 #include "EncoderHandler.h"
 #include "CommHandler.h"
+#include "BalanceController.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -157,8 +158,9 @@ int main(void)
   initEncoder();
 
 
-  //LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
-  //LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
+  //BCParams.kp = 1;
+  LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
+  LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
 
 
 
