@@ -15,7 +15,7 @@ typedef struct _MPU6050 {
 
 	float accScale;
 	float gScale;
-
+	uint8_t readFlag;
 } MPU6050;
 
 

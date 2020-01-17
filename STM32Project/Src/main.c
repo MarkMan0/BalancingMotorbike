@@ -174,8 +174,11 @@ int main(void)
 
   while (1)
   {
-
-	  MPU6050readData(&mpu);
+	  if(mpu.readFlag) {
+		  //keep read frequency @1kHz
+		  MPU6050readData(&mpu);
+		  mpu.readFlag = 0;
+	  }
 	  //MPU6050readForRoll(&mpu);
 
     /* USER CODE END WHILE */

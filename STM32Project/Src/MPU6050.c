@@ -35,7 +35,7 @@ void MPU6050init(MPU6050* mpu) {
 	mpu->gScale = 1.0/131.0;
 
 	i2c_write(MPU6050_ADDRESS, MPU_6050_REG_PWR_MGMT_1, 0x00);	//reset MPU
-	i2c_write(MPU6050_ADDRESS, MPU_6050_REG_CONFIG, 0x02);
+	i2c_write(MPU6050_ADDRESS, MPU_6050_REG_CONFIG, 0x02);		//enable filter
 }
 
 

@@ -56,6 +56,7 @@
 
 static inline void balanceContLoop() {
 	calcRoll((Orientation*) &orientation);
+	orientation.mpu->readFlag = 1;	//get new reading
 	float e = -orientation.roll;
 
 	if(e < BCParams.deadzone && e > -BCParams.deadzone)
