@@ -6,7 +6,7 @@
 #include "CurrentController.h"
 
 typedef struct _BalanceContParams {
-	float ki, kp, kd;
+	float kp, ki, kd;
 	float lastI;
 	float lastE;
 	const float ts;
@@ -27,7 +27,7 @@ static inline void balanceContLoop() {
 		e = 0.0;
 
 	BCParams.lastI += BCParams.ki * BCParams.ts * e;
-
+	BCParams.lastI = CONSTRAIN(BCParams.lastI, BCParams.outMin, BCParams.outMax);
 	float sp = BCParams.kp*e + BCParams.lastI + BCParams.kd/BCParams.ts * (e - BCParams.lastE);
 	BCParams.lastE = e;
 	CCParams.setVal = CONSTRAIN(sp, BCParams.outMin, BCParams.outMax);
