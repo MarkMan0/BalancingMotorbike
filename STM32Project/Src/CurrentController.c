@@ -60,7 +60,7 @@ void initTIM_CurrCont() {
 
 
 void calcCurrentSensorOffset() {
-	const uint16_t N = 500;
+	const uint16_t N = 1000;
 	float sum = 0.0;
 	for(uint16_t i = 0; i < N; ++i) {
 		readCurrent();
