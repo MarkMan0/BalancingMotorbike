@@ -86,17 +86,6 @@ static uint8_t isValid(float val) {
 void handleCommand(uint8_t *cmd) {
 
 	switch(cmd[0]) {
-	case 'P':
-	case 'p': {
-		//turn left
-		int16_t pos = getIntFromCmd(cmd);
-		MC.servoPW = map(pos, -50, 50, SERVO_PW_MIN, SERVO_PW_MAX);
-		//MC.servoPW = CONSTRAIN(MC.servoPW, SERVO_PW_MIN, SERVO_PW_MAX);
-
-		updateServoPW();
-		break;
-	}
-
 	case 'Q':
 	case 'q': {
 		//move forward/backward with desired speed
@@ -111,6 +100,17 @@ void handleCommand(uint8_t *cmd) {
 		MC.motorPW = CONSTRAIN(MC.motorPW, MOTOR_PW_MIN, MOTOR_PW_MAX);
 
 		updateMotorPWM();
+		break;
+	}
+
+	case 'W':
+	case 'w': {
+		//turn left
+		int16_t pos = getIntFromCmd(cmd);
+		MC.servoPW = map(pos, -50, 50, SERVO_PW_MIN, SERVO_PW_MAX);
+		//MC.servoPW = CONSTRAIN(MC.servoPW, SERVO_PW_MIN, SERVO_PW_MAX);
+
+		updateServoPW();
 		break;
 	}
 
@@ -147,8 +147,8 @@ void handleCommand(uint8_t *cmd) {
 	case 'V':
 	case 'v': {
 		//pause current control loop
-		updateFlywheelPWM(0);
 		LL_TIM_DisableCounter(TIM_CC_LOOP);
+		updateFlywheelPWM(0);
 		break;
 	}
 
@@ -178,7 +178,7 @@ void handleCommand(uint8_t *cmd) {
 	}
 	case 'K':
 	case 'k': {
-		//set Kp for balance controller
+		//set Ki for balance controller
 		float val = getFloatFromCmd(cmd);
 		if(isValid(val)) {
 			BCParams.ki = val;
@@ -187,7 +187,7 @@ void handleCommand(uint8_t *cmd) {
 	}
 	case 'J':
 	case 'j': {
-		//set Kp for balance controller
+		//set Kd for balance controller
 		float val = getFloatFromCmd(cmd);
 		if(isValid(val)) {
 			BCParams.kd = val;
