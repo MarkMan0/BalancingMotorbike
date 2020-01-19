@@ -3,8 +3,6 @@
 
 #include <math.h>
 
-#define DEG_TO_RAD (57.2957795131)
-
 //calculates roll and pitch values
 //uses a complementary filter the combine both accelerometer and gyro data
 void calcOrientation(Orientation* o){
@@ -19,11 +17,12 @@ void calcOrientation(Orientation* o){
 			 o->mpu->gBuff[1]*o->mpu->gScale,
 			 o->mpu->gBuff[2]*o->mpu->gScale};
 
-
-	o->roll = coef*(g[0]/DEG_TO_RAD*sampleT + o->roll) + (1.0-coef)*asinf(acc[1]);
+	float roll = atan2f(acc[1], acc[2]);
+	o->roll = coef*(g[0]*sampleT + o->roll) + (1.0-coef)*asinf(roll);
 	if(isnanf(o->roll)) o->roll = 0.0;
 
-	o->pitch = coef*(g[1]/DEG_TO_RAD*sampleT + o->pitch) + (1.0-coef)*asinf(0.0 - acc[0]);
+	float pitch = atan2((-acc[0]) , sqrt(acc[1]*acc[1] + acc[2]*acc[2]));
+	o->pitch = coef*(g[1]*sampleT + o->pitch) + (1.0-coef)*pitch;
 	if(isnanf(o->pitch)) o->pitch = 0.0;
 
 	o->yaw = g[2]*sampleT + o->yaw;
@@ -35,10 +34,12 @@ void calcRoll(Orientation* o) {
 	const float sampleT = 1.0/1000;
 	const float coef = 0.95;
 
-	float acc = o->mpu->accBuff[1]*o->mpu->accScale,
+	float accY = o->mpu->accBuff[1]*o->mpu->accScale,
+			accZ = o->mpu->accBuff[2]*o->mpu->accScale,
 			g = o->mpu->gBuff[0]*o->mpu->gScale;
 
-	o->roll = coef*(g/DEG_TO_RAD*sampleT + o->roll) + (1.0-coef)*asinf(acc);
+	float roll = atan2f(accY, accZ);
+	o->roll = coef*(g*sampleT + o->roll) + (1.0-coef)*roll;
 	if(isnanf(o->roll)) o->roll = 0.0;
 }
 

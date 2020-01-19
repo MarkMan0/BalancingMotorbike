@@ -2,6 +2,7 @@
 #include "i2c.h"
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "MPU6050_Registers.h"
 
@@ -20,8 +21,10 @@ void MPU6050readData(MPU6050* mpu) {
 
 //reads the y accelerometer and gyroscope data
 void MPU6050readForRoll(MPU6050* mpu) {
-	if(i2c_read_n_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_YOUT_H, (mpu->accBuff+1), 1) ) {
+	//for roll the X and Z accelerometer data and x gyro data are needed
+	if(i2c_read_n_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_YOUT_H, (mpu->accBuff+1), 2) ) {
 		mpu->accBuff[1] -= mpu->accCorrection[1];
+		mpu->accBuff[2] -= mpu->accCorrection[2];
 	}
 	if(i2c_read_n_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, (mpu->gBuff), 1) ) {
 		mpu->gBuff[0] -= mpu->gCorrection[0];
@@ -35,7 +38,7 @@ void MPU6050init(MPU6050* mpu) {
 
 	//set the default scale values
 	mpu->accScale = 1.0/16384.0;
-	mpu->gScale = 1.0/131.0;
+	mpu->gScale = 1.0/131.0/360.0*2.0*M_PI;		//directly to radians/s
 
 	i2c_write(MPU6050_ADDRESS, MPU_6050_REG_PWR_MGMT_1, 0x00);	//reset MPU
 	i2c_write(MPU6050_ADDRESS, MPU_6050_REG_CONFIG, 0x02);		//enable filter
