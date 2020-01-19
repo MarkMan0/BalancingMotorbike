@@ -9,6 +9,10 @@ typedef struct _Orientation {
 
 	float roll, pitch, yaw;
 	volatile MPU6050 *mpu;
+
+	const float filtParam;
+	const float ts;
+	const float levelState;
 } Orientation;
 
 //calculate all 6 axes
