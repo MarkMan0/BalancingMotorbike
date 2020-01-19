@@ -31,7 +31,7 @@
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
-#define MAXWAIT (50)
+#define MAXWAIT (2000)
 /* USER CODE END Private defines */
 
 void MX_I2C1_Init(void);
@@ -156,7 +156,7 @@ static inline uint8_t i2c_read_n_int16(uint8_t slave_addr, uint8_t register_addr
 
 
 	//send START and address, also set read bit
-	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 6, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_READ);
+	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 2*n, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_READ);
 
 	uint8_t ind = 1;
 	for(uint8_t i = 0; i < n; ++i) {
