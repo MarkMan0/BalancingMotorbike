@@ -120,16 +120,42 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 
+  /*	INTIALIZATION SEQUENCE:
+   *
+   *		1. Enable both USART
+   * 		1. init mpu
+   * 		2. enable ADC and flywheel PWM timer (0 pulse)
+   * 		3. turn on servo
+   * 		4. wait for user to place bike into known orientation
+   * 		5. calculate gyroscope and accelerometer steady state errors
+   * 		6. calculate current sensor 0 amp value
+   * 		7. wait for user to place bike into upright position
+   * 		8. Enable rear motor timer
+   * 		8. Enable Encoder
+   * 		9. Enable control loop timers
+   *
+   *
+   */
+
+  //USARTs enabled
   LL_USART_EnableIT_RXNE(USART2);
   LL_USART_EnableIT_RXNE(USART1);
 
+  //init mpu
   volatile MPU6050 mpu = { 0 };	//initialize to 0, rest is done in init
+  orientation.mpu = &mpu;
   MPU6050init((MPU6050*) &mpu);	//init sensor
 
+  //init ADC with DMA and TIMER
   initDMA_ADC((uint32_t) (CCParams.adcBuff), 2);
   initADC();
   initTIM_FLYWHEEL();
 
+  //enable encoder, before servo
+  initEncoder();
+
+  //enable servo in center position
+  initServo();
 
   waitUser();	//wait for signal on serial
 
@@ -137,30 +163,20 @@ int main(void)
 
   //calc IMU roll offset/error
   MPU6050CalcErr((MPU6050*) &mpu);	//calculate error
-  calcCurrentSensorOffset();
-
-
-
+  calcCurrentSensorOffset();		//calculate ADC offset
 
   /* *** CALIBRATION END *** */
 
-  waitUser();
+  waitUser();	//wait for second signal
 
-  orientation.mpu = &mpu;
-
-
-  initServo();
+  //enable rear motor
   initRearMotor();
 
+  //Enable current controller
+  initCurrCont();
 
-
-  initTIM_CurrCont();
-  initEncoder();
-
-
-  //BCParams.kp = 1;
-  LL_TIM_EnableIT_UPDATE(TIM_BALANCE_LOOP);
-  LL_TIM_EnableCounter(TIM_BALANCE_LOOP);
+  //Enable balance controller
+  initBalanceController();
 
 
 

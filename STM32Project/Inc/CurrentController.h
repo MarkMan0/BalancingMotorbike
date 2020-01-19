@@ -78,7 +78,7 @@ static inline void currContLoop() {
 void initADC();
 void initDMA_ADC(uint32_t toAddr, uint32_t sz);
 void initTIM_FLYWHEEL();
-void initTIM_CurrCont();
+void initCurrCont();
 void calcCurrentSensorOffset();
 
 

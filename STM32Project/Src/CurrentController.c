@@ -53,9 +53,12 @@ void initTIM_FLYWHEEL() {
 }
 
 
-void initTIM_CurrCont() {
-	  LL_TIM_EnableIT_UPDATE(TIM_CC_LOOP);
-	  LL_TIM_EnableCounter(TIM_CC_LOOP);
+void initCurrCont() {
+	CCParams.kp = 0;
+	CCParams.ki = 0;
+	CCParams.ts = 1.0/10000.0;
+	LL_TIM_EnableIT_UPDATE(TIM_CC_LOOP);
+	LL_TIM_EnableCounter(TIM_CC_LOOP);
 }
 
 

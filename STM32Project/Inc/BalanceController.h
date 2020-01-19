@@ -9,14 +9,15 @@ typedef struct _BalanceContParams {
 	float kp, ki, kd;
 	float lastI;
 	float lastE;
-	const float ts;
-	const float outMin, outMax;
-	const float deadzone;
+	float ts;
+	float outMin, outMax;
+	float deadzone;
 } BalanceContParams;
 
 
 extern volatile BalanceContParams BCParams;
 
+void initBalanceController();
 
 static inline void balanceContLoop() {
 	calcRoll((Orientation*) &orientation);
