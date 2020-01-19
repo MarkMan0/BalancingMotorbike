@@ -7,8 +7,8 @@
 
 //reads all 6 data via I2C
 void MPU6050readData(MPU6050* mpu) {
-	if(i2c_read3_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_XOUT_H,(uint8_t*) mpu->accBuff)
-			&& i2c_read3_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, (uint8_t*) mpu->gBuff) ) {
+	if(i2c_read_n_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_XOUT_H, mpu->accBuff, 3)
+			&& i2c_read_n_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, mpu->gBuff, 3) ) {
 
 		//apply offsets
 		for(int8_t i = 0; i < 3; ++i) {
@@ -20,10 +20,10 @@ void MPU6050readData(MPU6050* mpu) {
 
 //reads the y accelerometer and gyroscope data
 void MPU6050readForRoll(MPU6050* mpu) {
-	if(i2c_read_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_YOUT_H, (uint8_t*)(mpu->accBuff+1)) ) {
+	if(i2c_read_n_int16(MPU6050_ADDRESS, MPU_6050_REG_ACCEL_YOUT_H, (mpu->accBuff+1), 1) ) {
 		mpu->accBuff[1] -= mpu->accCorrection[1];
 	}
-	if(i2c_read_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, (uint8_t*)(mpu->gBuff)) ) {
+	if(i2c_read_n_int16(MPU6050_ADDRESS, MPU_6050_REG_GYRO_XOUT_H, (mpu->gBuff), 1) ) {
 		mpu->gBuff[0] -= mpu->gCorrection[0];
 	}
 }

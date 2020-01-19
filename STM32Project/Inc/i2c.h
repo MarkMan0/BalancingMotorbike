@@ -129,8 +129,10 @@ static inline uint8_t i2c_read_n(uint8_t slave_addr, uint8_t register_addr, uint
 }
 
 
-//read 6 bytes to int16 variables
-static inline uint8_t i2c_read3_int16(uint8_t slave_addr, uint8_t register_addr, uint8_t* buffer) {
+//optimized funtion to directly read the mpu registers into int16 values, automatically converets endian
+static inline uint8_t i2c_read_n_int16(uint8_t slave_addr, uint8_t register_addr, int16_t* buffer, uint8_t n) {
+
+	uint8_t* buff = (uint8_t*) buffer;		//to be able to read byte-by-byte
 
 	//send START, sends the SLAVE address
 	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 1, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
@@ -156,73 +158,15 @@ static inline uint8_t i2c_read3_int16(uint8_t slave_addr, uint8_t register_addr,
 	//send START and address, also set read bit
 	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 6, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_READ);
 
-	//first
-	if(!waitRXNE(I2C1, MAXWAIT)) return 0;	//wait until for RXNE to go to true
-	buffer[1] = LL_I2C_ReceiveData8(I2C1);
-	if(!waitRXNE(I2C1, MAXWAIT)) return 0;	//wait until for RXNE to go to true
-	buffer[0] = LL_I2C_ReceiveData8(I2C1);
+	uint8_t ind = 1;
+	for(uint8_t i = 0; i < n; ++i) {
+		if(!waitRXNE(I2C1, MAXWAIT)) return 0;	//wait until for RXNE to go to true
+		buff[ind] = LL_I2C_ReceiveData8(I2C1);
+		if(!waitRXNE(I2C1, MAXWAIT)) return 0;	//wait until for RXNE to go to true
+		buff[ind - 1] = LL_I2C_ReceiveData8(I2C1);
 
-	//second
-	if(!waitRXNE(I2C1, MAXWAIT)) return 0;	//wait until for RXNE to go to true
-	buffer[3] = LL_I2C_ReceiveData8(I2C1);
-	if(!waitRXNE(I2C1, MAXWAIT)) return 0;	//wait until for RXNE to go to true
-	buffer[2] = LL_I2C_ReceiveData8(I2C1);
-
-	//third
-	if(!waitRXNE(I2C1, MAXWAIT)) return 0;	//wait until for RXNE to go to true
-	buffer[5] = LL_I2C_ReceiveData8(I2C1);
-	if(!waitRXNE(I2C1, MAXWAIT)) return 0;	//wait until for RXNE to go to true
-	buffer[4] = LL_I2C_ReceiveData8(I2C1);
-
-
-	cnt = 0;
-	while(!LL_I2C_IsActiveFlag_STOP(I2C1)){
-		++cnt;
-		if(cnt > MAXWAIT) {
-			I2C1->ICR |= (1 << 4);	//clear NACK flag
-			return 0;
-		}
-	};
-
-	//End of transfer
-	LL_I2C_ClearFlag_STOP(I2C1);
-	I2C1->ICR |= (1 << 4);	//clear NACK flag
-
-	return 1;
-}
-
-//read two bytes into an int16
-static inline uint8_t i2c_read_int16(uint8_t slave_addr, uint8_t register_addr, uint8_t* buffer) {
-	//send START, sends the SLAVE address
-	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 1, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_WRITE);
-
-	//send register address which will be read
-	uint32_t cnt = 0;
-	while(!LL_I2C_IsActiveFlag_STOP(I2C1))
-	{
-		++cnt;
-		if(cnt > MAXWAIT) {
-			return 0;
-		}
-		if(LL_I2C_IsActiveFlag_TXIS(I2C1))
-		{
-			LL_I2C_TransmitData8(I2C1, register_addr);
-		}
+		ind += 2;
 	}
-	LL_I2C_ClearFlag_STOP(I2C1);
-	while(LL_I2C_IsActiveFlag_STOP(I2C1)){}
-	//end of first half
-
-
-	//send START and address, also set read bit
-	LL_I2C_HandleTransfer(I2C1, slave_addr, LL_I2C_ADDRSLAVE_7BIT, 2, LL_I2C_MODE_AUTOEND, LL_I2C_GENERATE_START_READ);
-
-
-	if(!waitRXNE(I2C1, MAXWAIT)) return 0;	//wait until for RXNE to go to true
-	buffer[1] = LL_I2C_ReceiveData8(I2C1);
-	if(!waitRXNE(I2C1, MAXWAIT)) return 0;	//wait until for RXNE to go to true
-	buffer[0] = LL_I2C_ReceiveData8(I2C1);
-
 
 	cnt = 0;
 	while(!LL_I2C_IsActiveFlag_STOP(I2C1)){
@@ -232,12 +176,14 @@ static inline uint8_t i2c_read_int16(uint8_t slave_addr, uint8_t register_addr, 
 			return 0;
 		}
 	};
+
 	//End of transfer
 	LL_I2C_ClearFlag_STOP(I2C1);
 	I2C1->ICR |= (1 << 4);	//clear NACK flag
 
 	return 1;
 }
+
 
 /* USER CODE END Prototypes */
 
