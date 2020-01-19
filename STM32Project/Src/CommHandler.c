@@ -51,9 +51,6 @@ static volatile uint8_t startFlag;
 void receiveCharCallback(uint8_t c) {
 	static uint8_t buffer[UART_RX_BUFLEN];
 	static uint8_t ind = 0;
-	if(c == 'a') {
-		startFlag = 1;	//indicate start
-	}
 	if(ind < UART_RX_BUFLEN) {
 		buffer[ind++] = c;
 	} else {
@@ -192,6 +189,11 @@ void handleCommand(uint8_t *cmd) {
 		if(isValid(val)) {
 			BCParams.kd = val;
 		}
+		break;
+	}
+	case 'A':
+	case 'a': {
+		startFlag = 1;
 		break;
 	}
 

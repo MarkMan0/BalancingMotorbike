@@ -123,16 +123,16 @@ int main(void)
   /*	INTIALIZATION SEQUENCE:
    *
    *		1. Enable both USART
-   * 		1. init mpu
-   * 		2. enable ADC and flywheel PWM timer (0 pulse)
-   * 		3. turn on servo
-   * 		4. wait for user to place bike into known orientation
-   * 		5. calculate gyroscope and accelerometer steady state errors
-   * 		6. calculate current sensor 0 amp value
-   * 		7. wait for user to place bike into upright position
-   * 		8. Enable rear motor timer
-   * 		8. Enable Encoder
-   * 		9. Enable control loop timers
+   * 		2. init mpu
+   * 		3. enable ADC and flywheel PWM timer (0 pulse)
+   * 		4. turn on servo
+   * 		5. wait for user to place bike into known orientation
+   * 		6. calculate gyroscope and accelerometer steady state errors
+   * 		7. calculate current sensor 0 amp value
+   * 		8. wait for user to place bike into upright position
+   * 		9. Enable rear motor timer
+   * 		10. Enable Encoder
+   * 		11. Enable control loop timers
    *
    *
    */
