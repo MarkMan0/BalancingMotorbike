@@ -6,7 +6,7 @@
 //#define CURRENT_CONTROL_CLOSEDLOOP
 //A correction factor is also applied to the pulse width, from the current speed
 //K is roughly the motor constant  K = voltage[pulse width]/speed[rad/s]
-#define CURRENT_CONTROL_CORRECTION_FACTOR	(0*0*1.0/1000.0)
+#define CURRENT_CONTROL_CORRECTION_FACTOR	(1.0/1000.0)
 #ifdef CURRENT_CONTROL_CLOSEDLOOP
 
 #endif
@@ -69,6 +69,7 @@ static inline void currContLoop() {
 		updateFlywheelPWM(CCParams.kp * e + CCParams.lastI);
 	#endif
 #else
+	CCParams.setVal = CONSTRAIN(CCParams.setVal, -0.2, 0.2);
 	updateFlywheelPWM(CCParams.setVal + CURRENT_CONTROL_CORRECTION_FACTOR*FWspeed.currSpd);
 
 #endif
