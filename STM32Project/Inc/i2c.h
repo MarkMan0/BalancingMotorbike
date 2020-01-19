@@ -31,7 +31,7 @@
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
-#define MAXWAIT (2000)
+#define MAXWAIT (500)
 /* USER CODE END Private defines */
 
 void MX_I2C1_Init(void);
