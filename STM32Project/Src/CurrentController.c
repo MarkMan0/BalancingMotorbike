@@ -15,7 +15,6 @@ void initADC() {
 	while(LL_ADC_IsCalibrationOnGoing(ADC1)) {} //wait for end of calibration
 	LL_mDelay(10);
 
-	LL_ADC_EnableIT_EOC(ADC1); //enable interrupt
 
 	LL_ADC_Enable(ADC1);
 
