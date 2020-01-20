@@ -1,6 +1,8 @@
 #include "CommHandler.h"
 #include "BalanceController.h"
 
+#include <string.h>
+
 static inline void updateServoPW() {
 	LL_TIM_OC_SetCompareCH1(TIM_SERVO, MC.servoPW);
 }
@@ -195,6 +197,15 @@ void handleCommand(uint8_t *cmd) {
 	case 'A':
 	case 'a': {
 		startFlag = 1;
+		break;
+	}
+	case 'H':
+	case 'h': {
+		//current controller correction factor
+		float val = getFloatFromCmd(cmd);
+		if(isValid(val)) {
+			CCParams.correction = val;
+		}
 		break;
 	}
 

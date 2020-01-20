@@ -56,6 +56,9 @@ void initCurrCont() {
 	CCParams.kp = 0;
 	CCParams.ki = 0;
 	CCParams.ts = 1.0/10000.0;
+	CCParams.correction = 1.0 / 1000.0;
+	CCParams.min = -0.3;
+	CCParams.max = -1.0*CCParams.max;
 	LL_TIM_EnableIT_UPDATE(TIM_CC_LOOP);
 	LL_TIM_EnableCounter(TIM_CC_LOOP);
 }

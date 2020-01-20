@@ -4,7 +4,7 @@
 volatile BalanceContParams BCParams = { 0 };
 
 void initBalanceController() {
-	BCParams.kp = 8;
+	BCParams.kp = 2;
 	BCParams.ki = 0;
 	BCParams.kd = 0;
 	BCParams.ts = 1.0/1000.0;
