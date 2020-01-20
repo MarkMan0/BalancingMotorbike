@@ -54,6 +54,7 @@ void receiveCharCallback(uint8_t c) {
 	if(ind < UART_RX_BUFLEN) {
 		buffer[ind++] = c;
 	} else {
+		memset(buffer, 0, UART_RX_BUFLEN);
 		ind = 0;
 	}
 	if(c == '\n' || c == '\r'  || c == '\0') {
