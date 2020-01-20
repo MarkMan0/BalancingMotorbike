@@ -69,7 +69,7 @@ static inline void currContLoop() {
 		updateFlywheelPWM(CCParams.kp * e + CCParams.lastI);
 	#endif
 #else
-	CCParams.setVal = CONSTRAIN(CCParams.setVal, -0.2, 0.2);
+	//CCParams.setVal = CONSTRAIN(CCParams.setVal, -0.2, 0.2);
 	updateFlywheelPWM(CCParams.setVal + CURRENT_CONTROL_CORRECTION_FACTOR*FWspeed.currSpd);
 
 #endif
