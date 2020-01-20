@@ -43,7 +43,7 @@ void calcRoll(Orientation* o) {
 
 
 volatile Orientation orientation = { 0, 0, 0, 0,
-		0.75,	//filter
+		0.5,	//filter
 		1.0/1000.0,	//sample time
 		-0.05		//level state
 };
