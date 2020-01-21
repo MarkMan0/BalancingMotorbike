@@ -3,8 +3,8 @@
 
 #include "stdint.h"
 
-#define SERVO_PW_MAX	(122)
-#define SERVO_PW_MIN	(28)
+#define SERVO_PW_MAX	(126)
+#define SERVO_PW_MIN	(32)
 #define SERVO_CENTER    ((SERVO_PW_MAX + SERVO_PW_MIN)/2)
 #define SERVO_PW_STEP	(2)
 
