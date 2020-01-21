@@ -14,7 +14,7 @@ TIM2 funguje v encoder móde, ktorý meria polohu zotrvačníka.\
 TIM16 generuje PWM signál pre servo, ktorým otáčame predné koleso. Na update evente tohto časovača rátame rýchlosť zotrvačníka. \
 TIM3 generuje PWM sinál pre zadný motor, ktorým poháňame motorku. 
 
-## Príkazy
+### Príkazy
 * Q - rýchlosť
 * W - servo
 * M - prúdový regulátor Kp
@@ -26,6 +26,9 @@ TIM3 generuje PWM sinál pre zadný motor, ktorým poháňame motorku.
 * L - balance regulátor Kp
 * K - balance regulátor Ki
 * J - balance regulátor Kd
+
+### Schéma zapojenia
+![alt text](/Documentation/Pics/Schematic.png)\
 
 
 ## Zhodnotenie 
