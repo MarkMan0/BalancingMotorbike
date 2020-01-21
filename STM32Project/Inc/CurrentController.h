@@ -61,7 +61,9 @@ static inline void currContLoop() {
 	CCParams.lastI = CONSTRAIN(CCParams.lastI, -1, 1);	//clamp integral
 		updateFlywheelPWM((CCParams.kp * e + CCParams.lastI) + FWspeed.currSpd * CCParams.correction);		//update PWM
 #else
-	updateFlywheelPWM(CCParams.setVal + CCParams.correction*FWspeed.currSpd);
+	float sp = CCParams.setVal + CCParams.correction*FWspeed.currSpd;
+	sp = CONSTRAIN(sp, CCParams.min, CCParams.max);
+	updateFlywheelPWM(sp);
 
 #endif
 }
